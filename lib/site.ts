@@ -21,9 +21,12 @@ export const profiles: { label: string; url: string }[] = [
     label: 'LinkedIn',
     url: 'https://www.linkedin.com/in/michael-adeleke-4a1228217',
   },
-  { label: 'GitHub', url: '' },
-  { label: 'Google Scholar', url: '' },
-  { label: 'ORCID', url: '' },
+  { label: 'GitHub', url: 'https://github.com/michaeladeleke2' },
+  {
+    label: 'Google Scholar',
+    url: 'https://scholar.google.com/citations?user=xVwEuz4AAAAJ&hl=en',
+  },
+  { label: 'ORCID', url: 'https://orcid.org/0009-0008-9557-6198' },
 ].filter((p) => p.url !== '')
 
 export const nav = [

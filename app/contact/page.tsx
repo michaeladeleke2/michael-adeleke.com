@@ -39,7 +39,9 @@ export default function ContactPage() {
                 href={p.url}
                 className="break-words text-base text-accent underline underline-offset-[0.18em]"
               >
-                {p.url.replace(/^https?:\/\/(www\.)?/, '')}
+                {/* Drop the scheme and any query string: Google Scholar's user id
+                  wraps across two lines and reads as noise. */}
+              {p.url.replace(/^https?:\/\/(www\.)?/, '').replace(/\?.*$/, '')}
               </a>
             </dd>
           </div>
