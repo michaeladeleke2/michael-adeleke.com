@@ -30,8 +30,20 @@ export function Shell({ children }: { children: React.ReactNode }) {
   )
 }
 
-export function SectionHeading({ children }: { children: React.ReactNode }) {
+export function SectionHeading({
+  children,
+  align = 'center',
+}: {
+  children: React.ReactNode
+  align?: 'center' | 'left'
+}) {
   return (
-    <h2 className="text-center font-display text-xl text-ink">{children}</h2>
+    <h2
+      className={`font-display text-ink ${
+        align === 'center' ? 'text-center text-xl' : 'text-left text-lg'
+      }`}
+    >
+      {children}
+    </h2>
   )
 }
