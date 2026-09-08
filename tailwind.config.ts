@@ -24,6 +24,7 @@ const config: Config = {
         accent: 'rgb(var(--accent) / <alpha-value>)',
         'accent-soft': 'rgb(var(--accent-soft) / <alpha-value>)',
         'on-accent': 'rgb(var(--on-accent) / <alpha-value>)',
+        'capture-field': 'rgb(var(--capture-field) / <alpha-value>)',
         hairline: 'rgb(var(--hairline) / <alpha-value>)',
       },
       fontFamily: {

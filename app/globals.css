@@ -14,6 +14,9 @@
        theme: white clears 4.5:1 on the deep crimson but only reaches
        3.79:1 on the lifted one. */
     --on-accent: 255 255 255; /* #FFFFFF */
+    /* The radar capture's own colormap background. Belongs to the data, not
+       to the palette, so it does not change between themes. */
+    --capture-field: 0 0 127; /* #00007F */
 
     /* Derived, not in the brief's palette but needed for structure. */
     --hairline: 230 225 223; /* #E6E1DF */
@@ -40,6 +43,7 @@
     --accent: 230 76 87; /* #E64C57 */
     --accent-soft: 74 29 34; /* #4A1D22 */
     --on-accent: 18 16 17; /* #121011 */
+    --capture-field: 0 0 127; /* #00007F */
 
     --hairline: 44 40 41; /* #2C2829 */
     --shadow-near: rgba(0, 0, 0, 0.5);

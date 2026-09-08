@@ -20,6 +20,7 @@ brief.
 - [ ] Replace the example teaching entry with real AHE 603 portfolio entries
 - [ ] Revise `content/teaching-philosophy.mdx` into your own voice
 - [ ] Confirm the contact email in `lib/site.ts` is the one you want public
+- [ ] Archive the raw hero screen recording somewhere durable — it is not in the repo, and `public/hero/*` and `public/og.png` cannot be rebuilt without it
 
 ## Deployment
 
