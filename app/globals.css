@@ -1,0 +1,203 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: 255 255 255; /* #FFFFFF */
+    --surface: 246 244 243; /* #F6F4F3 */
+    --ink: 26 22 20; /* #1A1614 */
+    --ink-muted: 107 98 94; /* #6B625E */
+    --accent: 163 22 33; /* #A31621 */
+    --accent-soft: 232 196 199; /* #E8C4C7 */
+    /* Foreground for text sitting on --accent. It has to flip with the
+       theme: white clears 4.5:1 on the deep crimson but only reaches
+       3.79:1 on the lifted one. */
+    --on-accent: 255 255 255; /* #FFFFFF */
+
+    /* Derived, not in the brief's palette but needed for structure. */
+    --hairline: 230 225 223; /* #E6E1DF */
+    --shadow-near: rgba(26, 22, 20, 0.06);
+    --shadow-far: rgba(26, 22, 20, 0.08);
+
+    /* Spectrogram field: low -> high intensity. */
+    --band-0: 246 244 243;
+    --band-1: 232 196 199;
+    --band-2: 201 106 116;
+    --band-3: 163 22 33;
+
+    color-scheme: light;
+  }
+
+  .dark {
+    --bg: 18 16 17; /* #121011 */
+    --surface: 29 26 27; /* #1D1A1B */
+    --ink: 237 233 231; /* #EDE9E7 */
+    --ink-muted: 148 139 135; /* #948B87 */
+    /* Brief specified #D42C3A, which measures 3.81:1 on --bg and 3.47:1 on
+       --surface — below the 4.5:1 floor the brief also sets. Lifted to the
+       nearest crimson that passes both (5.00 / 4.55). */
+    --accent: 230 76 87; /* #E64C57 */
+    --accent-soft: 74 29 34; /* #4A1D22 */
+    --on-accent: 18 16 17; /* #121011 */
+
+    --hairline: 44 40 41; /* #2C2829 */
+    --shadow-near: rgba(0, 0, 0, 0.5);
+    --shadow-far: rgba(0, 0, 0, 0.4);
+
+    --band-0: 29 26 27;
+    --band-1: 74 29 34;
+    --band-2: 158 43 54;
+    --band-3: 230 76 87;
+
+    color-scheme: dark;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: rgb(var(--bg));
+    color: rgb(var(--ink));
+    font-family: var(--font-serif);
+    font-size: 1.125rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: rgb(var(--ink));
+    /* Sentence case is an authoring rule, not a transform — do not add
+       text-transform here. */
+  }
+
+  /* Keyboard focus only, and never removed. */
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent));
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: rgb(var(--accent-soft));
+    color: rgb(var(--ink));
+  }
+
+  a {
+    color: inherit;
+  }
+}
+
+@layer components {
+  /* Long-form body copy: MDX portfolio entries and project write-ups. */
+  .prose-body {
+    max-width: 34rem;
+  }
+
+  .prose-body > * + * {
+    margin-top: 1.1em;
+  }
+
+  .prose-body h2 {
+    font-size: 1.75rem;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    margin-top: 2.4em;
+    margin-bottom: 0.1em;
+  }
+
+  .prose-body h2:first-child {
+    margin-top: 0;
+  }
+
+  .prose-body h3 {
+    font-size: 1.3125rem;
+    line-height: 1.4;
+    margin-top: 1.9em;
+    margin-bottom: 0.1em;
+  }
+
+  .prose-body a {
+    color: rgb(var(--accent));
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 1px;
+  }
+
+  .prose-body a:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  .prose-body ul,
+  .prose-body ol {
+    padding-left: 1.3em;
+  }
+
+  .prose-body ul {
+    list-style: disc;
+  }
+
+  .prose-body ol {
+    list-style: decimal;
+  }
+
+  .prose-body li + li {
+    margin-top: 0.4em;
+  }
+
+  .prose-body blockquote {
+    border-left: 2px solid rgb(var(--accent-soft));
+    padding-left: 1.1em;
+    color: rgb(var(--ink-muted));
+  }
+
+  .prose-body code {
+    background: rgb(var(--surface));
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-size: 0.9em;
+  }
+
+  .prose-body pre {
+    background: rgb(var(--surface));
+    padding: 1rem 1.15rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  .prose-body pre code {
+    background: none;
+    padding: 0;
+    font-size: inherit;
+  }
+
+  .prose-body hr {
+    border: 0;
+    border-top: 1px solid rgb(var(--hairline));
+    margin: 2.5em 0;
+  }
+
+  .prose-body img {
+    border-radius: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

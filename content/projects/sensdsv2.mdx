@@ -1,0 +1,56 @@
+---
+title: "SensDSv2"
+summary: "A desktop application that turns a 60 GHz radar sensor into a machine learning classroom — live spectrograms, gesture collection, model training, and prediction, in one loop a student can run in a single class period."
+period: "2025 – present"
+area: "Radar sensing and ML education"
+role: "Lead developer and researcher"
+order: 1
+featured: true
+stack:
+  - "PyQt6"
+  - "Infineon BGT60TR13C"
+  - "PyTorch"
+  - "Vision Transformers"
+  - "pyqtgraph"
+links:
+  - { label: "Under review at SIGCSE", href: "/publications/" }
+---
+
+Machine learning is usually taught with datasets that arrive pre-cleaned and
+pre-labeled. The interesting decisions — what to measure, how to represent it,
+what to do when the signal is ambiguous — have already been made by someone
+else. SensDS exists to hand those decisions back to the student.
+
+The application drives an Infineon BGT60TR13C 60 GHz radar sensor and takes a
+class through the whole loop: watch the micro-Doppler spectrogram move as you
+move, record labeled gesture captures, train a model on what the class just
+collected, and test it live. Six tabs, one per stage, so the pipeline is
+visible rather than hidden behind a script.
+
+## The signal pipeline
+
+Raw radar frames become spectrograms through a chain the interface exposes
+rather than conceals: a range FFT to resolve distance, moving-target
+indication to suppress static clutter, then a short-time Fourier transform
+across slow time to produce the micro-Doppler image that a Vision Transformer
+is trained on. Chirp parameters are configured through the Infineon SDK and
+surfaced in the interface, so the relationship between sensor configuration
+and the resulting image is something a student can change and see.
+
+## Novelty scoring
+
+Classroom data is not lab data. Students gesture at the wrong distance, at the
+wrong angle, or invent a gesture nobody trained on. A PCA-based novelty score
+flags captures that fall outside the training feature space, which turned out
+to be the most pedagogically useful part of the system: it makes distribution
+shift a thing students encounter directly rather than a term in a lecture. It
+also motivates on-device training as a design target, since the fix for
+"the model has never seen anyone like me" is to retrain on the room you are in.
+
+## Deployment constraints
+
+The system runs on the Surface Pro hardware that schools actually have, not on
+a workstation. Getting inference to keep up meant reworking model selection and
+inference scheduling rather than assuming the GPU. It ships as signed macOS and
+Windows executables with a user guide, because a tool that requires a Python
+environment to be set up is a tool that does not get used in a classroom.
