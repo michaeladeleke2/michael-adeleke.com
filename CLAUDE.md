@@ -30,6 +30,8 @@ dev server ends up serving stale chunks. Stop dev first.
 | Gallery photos | `public/gallery/` + `content/gallery.ts` |
 | CV PDF | `public/cv/michael-adeleke-cv.pdf` — keep this path stable, it is linked from application materials |
 | Home hero capture | `public/hero/capture.webp` + `capture-still.webp` |
+| Master screen recording | `media/sensds-micro-doppler-capture.gif` (15.3 MB, tracked) |
+| Headshot | `public/headshot.jpg` (400x400; display at 12rem or under to stay above 2x) |
 | OG card | `public/og.png` |
 | Hero + OG build script | `scripts/build-hero-capture.py` (see below) |
 
@@ -51,6 +53,14 @@ same reason.
 `backdrop-blur`, and an element with `backdrop-filter` becomes the containing
 block for its `position: fixed` descendants — inside the header, the sheet gets
 pinned to the 64px header box instead of the viewport.
+
+**Layout is centred; body text is not.** Page titles, ledes and section
+headings are centred (`PageHeader`, `SectionHeading`). The columns beneath them
+are centred too, but the text inside stays left-aligned: centred ragged-left
+prose is hard to read past a couple of lines. Two measures are in play —
+`max-w-measure` (34rem) for prose, and `max-w-list` (42rem) for citations,
+talks and awards, where 34rem shreds a reference line. A page picks one and
+sticks to it so the left edges line up.
 
 **Every teaching entry needs all four sections.** `lib/content.ts` throws at
 build time if an entry is missing "What the activity asked", "What I made",
@@ -78,20 +88,24 @@ same value in `:root` and `.dark`.
 
 ## Rebuilding the hero capture
 
-The raw screen recording is ~15 MB and lives **outside the repo**. Keep it
-somewhere durable — `public/hero/*` and `public/og.png` cannot be regenerated
-without it.
-
 ```bash
-python3 scripts/build-hero-capture.py [path/to/recording.gif]
+python3 scripts/build-hero-capture.py
 ```
 
-The script trims the tail frames (which contain the macOS screen-recording
-toolbar), crops to the plot interior at about ±2.5 m/s — the full plot is
-mostly empty navy and carries a stray mouse cursor — and drops to 12.5fps,
-taking the asset from 15.3 MB to 652 KB. If you swap in a different recording,
-re-check `LAST_CLEAN_FRAME` and `CROP` at the top of the script; they are
-specific to that capture.
+The master recording is tracked at `media/sensds-micro-doppler-capture.gif`, so
+the hero and the OG card can always be rebuilt from source.
+
+**Only frames 0-199 of that recording are usable.** Past frame 200 a mouse
+cursor drifts through the plot; around frame 342 a macOS system menu ("Screen
+Saver", "Lock Screen") drops over the middle of it; and from about frame 386
+the signal is flat because the recording is being stopped. The script crops to
+the plot interior at roughly +/-2.5 m/s, which also removes the axes and a
+stray cursor sitting in the upper right, and drops to 16.7fps. That takes the
+asset from 15.3 MB to 457 KB.
+
+If you ever swap in a different recording, re-check `FIRST_FRAME`, `LAST_FRAME`
+and `CROP` at the top of the script. They are specific to this capture, and the
+UI intrusions above are exactly the kind of thing that ships unnoticed.
 
 ## Adding content
 
@@ -115,6 +129,9 @@ competencies: ["Learning objectives", "Alignment"]
 
 Put artifact files in `public/teaching/files/`. Before publishing, check each
 one for anything identifying classmates or students, and redact it.
+
+Prose style: no em dashes. Use a comma, a colon, or a second sentence. They had
+built up across the content and read as a tell.
 
 Set `draft: true` on any entry or project to keep it out of the build.
 

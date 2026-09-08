@@ -40,7 +40,7 @@ export default async function ProjectPage({
 
   return (
     <Shell>
-      <p className="mb-8">
+      <p className="mb-6 text-center">
         <Link
           href="/research/"
           className="text-xs text-ink-muted transition-colors duration-120 hover:text-accent"
@@ -53,7 +53,7 @@ export default async function ProjectPage({
         title={fm.title}
         lede={fm.summary}
         meta={
-          <dl className="flex flex-wrap gap-x-10 gap-y-3">
+          <dl className="flex flex-wrap justify-center gap-x-8 gap-y-3">
             <div>
               <dt className="text-xs text-ink-muted">Period</dt>
               <dd className="text-xs text-ink">{fm.period}</dd>
@@ -78,12 +78,12 @@ export default async function ProjectPage({
         }
       />
 
-      <article className="mt-12 text-base text-ink">
+      <article className="mt-10 text-base text-ink">
         <Mdx source={project.body} />
       </article>
 
       {fm.links && fm.links.length > 0 && (
-        <div className="mt-14 max-w-measure border-t border-hairline pt-6">
+        <div className="mx-auto mt-12 max-w-measure border-t border-hairline pt-6">
           <ul className="flex flex-wrap gap-x-6 gap-y-2">
             {fm.links.map((l) => (
               <li key={l.href + l.label}>

@@ -14,13 +14,11 @@ brief.
 
 ## Before launch
 
-- [ ] Add a headshot at `public/headshot.jpg` and swap the placeholder in `app/about/page.tsx`
 - [ ] Add gallery photos to `public/gallery/` and describe them in `content/gallery.ts`
 - [ ] Fill in GitHub, Google Scholar, and ORCID URLs in `lib/site.ts` (empty ones are hidden, not broken)
 - [ ] Replace the example teaching entry with real AHE 603 portfolio entries
 - [ ] Revise `content/teaching-philosophy.mdx` into your own voice
 - [ ] Confirm the contact email in `lib/site.ts` is the one you want public
-- [ ] Archive the raw hero screen recording somewhere durable — it is not in the repo, and `public/hero/*` and `public/og.png` cannot be rebuilt without it
 
 ## Deployment
 

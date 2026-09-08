@@ -20,7 +20,7 @@ export default function GalleryPage() {
       {photos.length > 0 ? (
         <GalleryGrid photos={photos} />
       ) : (
-        <p className="mt-10 max-w-measure text-base text-ink-muted">
+        <p className="mx-auto mt-10 max-w-measure text-center text-base text-ink-muted">
           Photos are being added. Drop files into{' '}
           <code>/public/gallery</code> and describe them in{' '}
           <code>content/gallery.ts</code>.

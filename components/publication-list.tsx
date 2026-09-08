@@ -110,7 +110,7 @@ function Entry({ pub }: { pub: Publication }) {
 
 export function PublicationList({ items }: { items: Publication[] }) {
   return (
-    <ul className="mt-6">
+    <ul className="mx-auto mt-6 max-w-list">
       {items.map((pub) => (
         <Entry key={pub.id} pub={pub} />
       ))}

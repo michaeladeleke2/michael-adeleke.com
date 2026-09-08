@@ -7,7 +7,7 @@ import { getTeachingByTheme, getTeachingPhilosophy } from '@/lib/content'
 export const metadata: Metadata = {
   title: 'Teaching',
   description:
-    'Teaching philosophy and a reflective portfolio of teaching artifacts — course design, assessment, inclusive practice, and reflection.',
+    'Teaching philosophy and a reflective portfolio of teaching artifacts: course design, assessment, inclusive practice, and reflection.',
   alternates: { canonical: '/teaching/' },
 }
 
@@ -29,7 +29,7 @@ export default function TeachingPage() {
       />
 
       {philosophy && (
-        <section className="mt-14">
+        <section className="mt-12">
           <SectionHeading>Philosophy</SectionHeading>
           <article className="mt-6 text-base text-ink">
             <Mdx source={philosophy} />
@@ -37,19 +37,19 @@ export default function TeachingPage() {
         </section>
       )}
 
-      <section className="mt-20">
+      <section className="mt-16">
         <SectionHeading>Portfolio</SectionHeading>
         {groups.length === 0 ? (
-          <p className="mt-6 max-w-measure text-base text-ink-muted">
+          <p className="mx-auto mt-6 max-w-measure text-center text-base text-ink-muted">
             Entries are being added. Each is an MDX file in{' '}
             <code>content/teaching</code> carrying all four required sections.
           </p>
         ) : (
-          <div className="mt-8 space-y-14">
+          <div className="mt-8 space-y-12">
             {groups.map((group) => (
               <div key={group.theme}>
-                <h3 className="font-display text-lg text-ink">{group.theme}</h3>
-                <div className="mt-5 grid gap-6 md:grid-cols-2">
+                <h3 className="text-center font-display text-lg text-ink">{group.theme}</h3>
+                <div className="mt-5 grid gap-5 md:grid-cols-2">
                   {group.entries.map((e) => (
                     <EntryCard
                       key={e.slug}

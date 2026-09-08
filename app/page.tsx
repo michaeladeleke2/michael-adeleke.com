@@ -64,12 +64,14 @@ export default function HomePage() {
       />
 
       <section className="overflow-hidden border-b border-hairline">
-        <div className="mx-auto max-w-shell px-5 pt-20 sm:px-8 sm:pt-28">
-          <h1 className="max-w-[13ch] font-display text-3xl text-ink sm:text-4xl">
+        <div className="mx-auto max-w-shell px-5 pt-16 text-center sm:px-8 sm:pt-24">
+          <h1 className="mx-auto max-w-[13ch] font-display text-3xl text-ink sm:text-4xl">
             {site.name}
           </h1>
-          <p className="mt-6 max-w-measure text-lg text-ink">{site.tagline}</p>
-          <p className="mt-4 max-w-measure text-sm text-ink-muted">
+          <p className="mx-auto mt-5 max-w-measure text-lg text-ink">
+            {site.tagline}
+          </p>
+          <p className="mx-auto mt-3 max-w-measure text-sm text-ink-muted">
             {site.role} at {site.affiliation}, in the Human-Technology
             Interaction Lab.
           </p>
@@ -77,11 +79,11 @@ export default function HomePage() {
 
         {/* The capture sits in flow rather than behind the type, so its
             clearance holds at every width. It still bleeds the full page. */}
-        <div className="mt-12 h-32 overflow-hidden bg-capture-field sm:mt-10 sm:h-auto">
+        <div className="mt-10 h-32 overflow-hidden bg-capture-field sm:mt-12 sm:h-auto">
           <HeroCapture />
         </div>
-        <div className="mx-auto max-w-shell px-5 py-4 sm:px-8">
-          <p className="max-w-measure text-xs text-ink-muted">
+        <div className="mx-auto max-w-shell px-5 py-4 text-center sm:px-8">
+          <p className="mx-auto max-w-measure text-xs text-ink-muted">
             Micro-Doppler capture from SensDS, using an Infineon BGT60TR13C
             60&nbsp;GHz radar. Time runs left to right; the vertical axis is
             Doppler velocity, and the bright line through the centre is the
@@ -91,7 +93,7 @@ export default function HomePage() {
       </section>
 
       <div className="mx-auto max-w-shell px-5 sm:px-8">
-        <section className="grid gap-6 py-16 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="grid gap-5 py-12 sm:grid-cols-2 lg:grid-cols-4">
           {sections.map((s) => (
             <Link
               key={s.href}
@@ -106,9 +108,9 @@ export default function HomePage() {
           ))}
         </section>
 
-        <section className="border-t border-hairline py-10">
+        <section className="border-t border-hairline py-8 text-center">
           <h2 className="sr-only">Recent</h2>
-          <ul className="max-w-measure space-y-3">
+          <ul className="mx-auto max-w-measure space-y-2">
             {latestTalk && (
               <li className="text-sm text-ink-muted">
                 Presented{' '}

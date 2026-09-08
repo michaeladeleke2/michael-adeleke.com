@@ -52,7 +52,7 @@ export const positions: Position[] = [
     period: 'Dec 2022 – Aug 2025',
     kind: 'research',
     summary:
-      'Applied systems across AI, VR, and STEM education — VR concussion education, conversational AI bias detection, and K-12 outreach.',
+      'Applied systems across AI, VR, and STEM education, including VR concussion education, conversational AI bias detection, and K-12 outreach.',
   },
   {
     title: 'Summer Research Assistant',

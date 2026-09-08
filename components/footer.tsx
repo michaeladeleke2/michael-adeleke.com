@@ -3,8 +3,8 @@ import { nav, profiles, site } from '@/lib/site'
 
 export function Footer() {
   return (
-    <footer className="mt-24 border-t border-hairline">
-      <div className="mx-auto flex max-w-shell flex-col gap-8 px-5 py-12 sm:px-8 md:flex-row md:justify-between">
+    <footer className="mt-16 border-t border-hairline">
+      <div className="mx-auto flex max-w-shell flex-col gap-8 px-5 py-10 sm:px-8 md:flex-row md:justify-between">
         <div className="max-w-measure">
           <p className="font-display text-sm font-semibold text-ink">
             {site.name}
@@ -51,7 +51,7 @@ export function Footer() {
           )}
         </div>
       </div>
-      <div className="mx-auto max-w-shell px-5 pb-10 sm:px-8">
+      <div className="mx-auto max-w-shell px-5 pb-8 sm:px-8">
         <p className="text-xs text-ink-muted">
           © {new Date().getFullYear()} {site.name}
         </p>

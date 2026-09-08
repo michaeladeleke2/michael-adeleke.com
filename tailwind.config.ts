@@ -45,6 +45,8 @@ const config: Config = {
       maxWidth: {
         // 68-character measure at 18px Source Serif 4
         measure: '34rem',
+        // Citations, talks and awards: longer lines than prose, still bounded.
+        list: '42rem',
         shell: '72rem',
       },
       boxShadow: {

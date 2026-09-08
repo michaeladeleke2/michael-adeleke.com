@@ -16,7 +16,7 @@ export default function ContactPage() {
         lede="The fastest way to reach me is email. I read messages about collaborations, talks, and prospective research directions."
       />
 
-      <dl className="mt-12 max-w-measure">
+      <dl className="mx-auto mt-10 max-w-measure">
         <div className="grid grid-cols-[7rem_minmax(0,1fr)] items-baseline gap-4 border-b border-hairline py-5">
           <dt className="text-xs text-ink-muted">Email</dt>
           <dd>
