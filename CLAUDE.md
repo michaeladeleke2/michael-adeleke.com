@@ -62,6 +62,14 @@ prose is hard to read past a couple of lines. Two measures are in play —
 talks and awards, where 34rem shreds a reference line. A page picks one and
 sticks to it so the left edges line up.
 
+**The site is currently noindexed.** `INDEXABLE` in `lib/site.ts` is `false`,
+which adds `noindex, nofollow` to every page and withholds the sitemap. It is
+deliberately paired with a `robots.txt` that still allows crawling, because a
+disallowed crawler never reads the noindex tag and Google will list the bare
+URL anyway. Flipping it to `true` is the launch; do not flip it while the
+teaching philosophy is still a draft in the wrong voice or the example
+portfolio entry is still present.
+
 **Every teaching entry needs all four sections.** `lib/content.ts` throws at
 build time if an entry is missing "What the activity asked", "What I made",
 "What I learned", or "How this shapes my teaching". An entry without the

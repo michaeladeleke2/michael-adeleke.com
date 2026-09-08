@@ -14,6 +14,13 @@ brief.
 
 ## Before launch
 
+The site ships with `INDEXABLE = false` in `lib/site.ts`, so every page carries
+`<meta name="robots" content="noindex, nofollow">` and the sitemap is withheld
+from `robots.txt`. It can be live on the real domain for testing without being
+indexed. **Flipping that one boolean to `true` is the launch.** Do it after the
+items below are done.
+
+
 - [ ] Add gallery photos to `public/gallery/` and describe them in `content/gallery.ts`
 - [ ] Replace the example teaching entry with real AHE 603 portfolio entries
 - [ ] Revise `content/teaching-philosophy.mdx` into your own voice

@@ -4,7 +4,7 @@ import './globals.css'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { ThemeScript } from '@/components/theme-script'
-import { site } from '@/lib/site'
+import { INDEXABLE, site } from '@/lib/site'
 
 const display = Inter_Tight({
   subsets: ['latin'],
@@ -41,6 +41,9 @@ export const metadata: Metadata = {
     images: ['/og.png'],
   },
   alternates: { canonical: '/' },
+  ...(INDEXABLE
+    ? {}
+    : { robots: { index: false, follow: false, nocache: true } }),
 }
 
 export default function RootLayout({

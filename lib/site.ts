@@ -40,3 +40,17 @@ export const nav = [
 ] as const
 
 export const CV_PATH = '/cv/michael-adeleke-cv.pdf'
+
+/**
+ * Flip to `true` to launch.
+ *
+ * While this is false every page carries <meta name="robots" content="noindex,
+ * nofollow">, so the site can be live on the real domain for testing without
+ * search engines indexing it. Deliberately paired with a robots.txt that still
+ * ALLOWS crawling: a disallowed crawler never reads the noindex tag, and
+ * Google can then list the bare URL anyway.
+ *
+ * Do not flip this until content/teaching-philosophy.mdx is in Michael's own
+ * voice and the example entry in content/teaching/ has been replaced.
+ */
+export const INDEXABLE = false
