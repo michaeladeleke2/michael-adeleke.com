@@ -1,7 +1,12 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import { PageHeader, SectionHeading, Shell } from '@/components/page-header'
-import { education, positions, researchInterests } from '@/content/cv-data'
+import {
+  education,
+  positions,
+  researchInterests,
+  technicalSkills,
+} from '@/content/cv-data'
 
 export const metadata: Metadata = {
   title: 'About',
@@ -103,6 +108,20 @@ export default function AboutPage() {
                 </li>
               ))}
             </ul>
+          </section>
+
+          <section>
+            <SectionHeading align="left">Technical skills</SectionHeading>
+            <dl className="mt-3 space-y-3">
+              {technicalSkills.map((g) => (
+                <div key={g.label}>
+                  <dt className="text-xs text-ink">{g.label}</dt>
+                  <dd className="mt-0.5 text-xs text-ink-muted">
+                    {g.items.join(', ')}
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </section>
         </aside>
       </div>

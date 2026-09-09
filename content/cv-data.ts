@@ -121,6 +121,54 @@ export const positions: Position[] = [...allPositions].sort((a, b) => {
   return recency(b).localeCompare(recency(a)) || b.start.localeCompare(a.start)
 })
 
+export type SkillGroup = { label: string; items: string[] }
+
+/** Verbatim from the CV's Technical Skills section. */
+export const technicalSkills: SkillGroup[] = [
+  {
+    label: 'Languages',
+    items: ['Python', 'Java', 'C#', 'JavaScript', 'Node.js', 'Ruby'],
+  },
+  {
+    label: 'Machine learning',
+    items: [
+      'PyTorch',
+      'scikit-learn',
+      'Vision Transformers',
+      'CNNs',
+      'RNN/LSTM',
+      'PCA and dimensionality reduction',
+    ],
+  },
+  {
+    label: 'Signal processing and sensing',
+    items: [
+      'micro-Doppler spectrogram analysis',
+      'Range FFT',
+      'MTI filtering',
+      'STFT',
+      'Infineon BGT60TR13C radar',
+      'MNE (EEG)',
+      'EmotiBit physiological sensing',
+    ],
+  },
+  {
+    label: 'Application development',
+    items: [
+      'PyQt6',
+      'pyqtgraph',
+      'Unity',
+      'VR development',
+      'PyInstaller',
+      'Git and GitHub Actions',
+    ],
+  },
+  {
+    label: 'Conversational AI',
+    items: ['IBM Watson Assistant', 'Dialogflow'],
+  },
+]
+
 export const researchInterests = [
   'Radar-based sensing and micro-Doppler signal processing',
   'Machine learning for interactive systems',
