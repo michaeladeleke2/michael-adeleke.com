@@ -17,7 +17,7 @@ export default function ResearchPage() {
     <Shell>
       <PageHeader
         title="Research"
-        lede="I work on radar sensing systems and on what happens when you put them in front of people who are learning. The sensing gives me signals that are rich and hard to read; the teaching gives me a reason to make them legible. Most of my projects live at that seam."
+        lede="Three lines of work with one thread running through them: taking something that is hard to see and making it legible enough to learn from. That has meant radar returns, the felt experience of a concussion, and what a middle schooler believes about who belongs in computing."
       />
 
       <div className="mt-8 grid gap-5 md:grid-cols-2">

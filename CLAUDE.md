@@ -77,6 +77,13 @@ build time if an entry is missing "What the activity asked", "What I made",
 reflection is evidence of attendance, not of teaching skill. Do not weaken this
 check to get a build through.
 
+**Carousels auto-advance, and that is the one exception to the rule below.**
+`components/carousel.tsx` rotates the SensDS walkthrough and the gallery. It
+never starts under `prefers-reduced-motion`, pauses on hover and on keyboard
+focus, stops permanently the moment the reader navigates or clicks into a
+slide, and always shows a pause control. WCAG 2.2.2 requires that last one for
+anything moving longer than five seconds. Do not remove it.
+
 **One non-user-triggered animation, on the home hero.** It is a real
 micro-Doppler capture from SensDS, authored with a WebP loop count of 1: it
 plays through once and holds its final frame. It does not loop. Everything else

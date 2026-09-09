@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Mdx } from '@/components/mdx'
-import { ResearchFigure } from '@/components/research-figure'
+import { FigureCarousel } from '@/components/figure-carousel'
 import { PageHeader, Shell } from '@/components/page-header'
 import { getProject, getProjects } from '@/lib/content'
 
@@ -89,12 +89,10 @@ export default async function ProjectPage({
             The system, end to end
           </h2>
           <p className="mx-auto mt-3 max-w-measure text-center text-sm text-ink-muted">
-            One class period runs the whole loop. Select a demo to play it.
+            One class period runs the whole loop. Select a demo to play it, or step through them below.
           </p>
-          <div className="mt-8 space-y-10">
-            {fm.figures.map((figure) => (
-              <ResearchFigure key={figure.src} figure={figure} />
-            ))}
+          <div className="mt-8">
+            <FigureCarousel figures={fm.figures} />
           </div>
         </section>
       )}
