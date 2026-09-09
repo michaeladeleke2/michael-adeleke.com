@@ -14,6 +14,31 @@ stack:
   - "pyqtgraph"
 links:
   - { label: "Under review at SIGCSE", href: "/publications/" }
+figures:
+  - src: "/research/sensds/visualize"
+    width: 1000
+    height: 460
+    label: "Visualization"
+    alt: "A live micro-Doppler spectrogram: a bright zero-Doppler line across the frame with gesture sidebands breaking above and below it."
+    caption: "Radar returns become a spectrogram in real time. Time runs left to right, the vertical axis is Doppler velocity, and the bright line through the centre is the static return that a moving hand breaks away from."
+  - src: "/research/sensds/collect"
+    width: 800
+    height: 386
+    label: "Collecting data"
+    alt: "The Collect Gesture Samples tab, showing a student name, a gesture label, a sample count, and the last captured gesture plotted beside them."
+    caption: "Students record their own labelled samples. Each capture is named, counted, and written into the dataset the class will train on, so the training set is the room they are standing in."
+  - src: "/research/sensds/train"
+    width: 800
+    height: 386
+    label: "Model training"
+    alt: "The Train Model tab, with accuracy and loss plotted per epoch and a training log printing beneath them."
+    caption: "A Vision Transformer trains on those captures, with accuracy and loss drawn per epoch and the run log printing alongside. The hyperparameters are exposed rather than hidden in a script."
+  - src: "/research/sensds/test"
+    width: 800
+    height: 390
+    label: "Testing"
+    alt: "The Test Gestures tab, where a maze game is driven by live gesture predictions with a model-confidence bar chart underneath."
+    caption: "The trained model then drives something. Live predictions steer a maze game while per-gesture confidence is shown underneath, so a wrong move is traceable back to the signal that caused it."
 ---
 
 Machine learning is usually taught with datasets that arrive pre-cleaned and

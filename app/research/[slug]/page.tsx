@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Mdx } from '@/components/mdx'
+import { ResearchFigure } from '@/components/research-figure'
 import { PageHeader, Shell } from '@/components/page-header'
 import { getProject, getProjects } from '@/lib/content'
 
@@ -81,6 +82,22 @@ export default async function ProjectPage({
       <article className="mt-8 text-base text-ink">
         <Mdx source={project.body} />
       </article>
+
+      {fm.figures && fm.figures.length > 0 && (
+        <section className="mx-auto mt-14 max-w-[54rem]">
+          <h2 className="text-center font-display text-xl text-ink">
+            The system, end to end
+          </h2>
+          <p className="mx-auto mt-3 max-w-measure text-center text-sm text-ink-muted">
+            One class period runs the whole loop. Select a demo to play it.
+          </p>
+          <div className="mt-8 space-y-10">
+            {fm.figures.map((figure) => (
+              <ResearchFigure key={figure.src} figure={figure} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {fm.links && fm.links.length > 0 && (
         <div className="mx-auto mt-10 max-w-measure border-t border-hairline pt-6">

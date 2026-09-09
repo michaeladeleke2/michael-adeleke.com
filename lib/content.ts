@@ -15,6 +15,15 @@ export type ProjectFrontmatter = {
   featured?: boolean
   order?: number
   draft?: boolean
+  /** Walkthrough demos rendered under the write-up. */
+  figures?: {
+    src: string
+    width: number
+    height: number
+    label: string
+    caption: string
+    alt: string
+  }[]
 }
 
 export type TeachingFrontmatter = {
