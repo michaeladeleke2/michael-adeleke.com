@@ -8,7 +8,19 @@ export const site = {
     'I build radar sensing systems and turn them into machine learning education people can actually touch.',
   description:
     'Michael Adeleke is a PhD student in Computer Science at the University of Alabama, working on radar-based sensing, micro-Doppler signal processing, and accessible machine learning education.',
-  email: 'm.adeleke01@gmail.com',
+  /**
+   * The institutional address leads: it signals the affiliation a program
+   * chair is checking for. The personal one is kept as a fallback because
+   * crimson.ua.edu is deprovisioned some months after leaving, and this site
+   * is meant to outlive the PhD.
+   */
+  email: 'madeleke@crimson.ua.edu',
+  emailAlt: 'm.adeleke01@gmail.com',
+  lab: {
+    name: 'Human-Technology Interaction Lab',
+    short: 'HTIL',
+    url: 'https://htilua.org/',
+  },
 } as const
 
 /**

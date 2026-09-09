@@ -11,7 +11,15 @@ export function Footer() {
           {site.name}
         </p>
         <p className="mt-1 text-xs text-ink-muted">
-          {site.role}, {site.affiliation}
+          Graduate Research Assistant, {site.affiliation}
+        </p>
+        <p className="mt-0.5 text-xs text-ink-muted">
+          <a
+            href={site.lab.url}
+            className="underline decoration-hairline underline-offset-[0.18em] transition-colors duration-120 hover:text-ink"
+          >
+            {site.lab.name} ({site.lab.short})
+          </a>
         </p>
 
         <nav aria-label="Footer" className="mt-4">

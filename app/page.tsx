@@ -13,6 +13,11 @@ const personSchema = {
     '@type': 'CollegeOrUniversity',
     name: site.affiliation,
   },
+  worksFor: {
+    '@type': 'ResearchOrganization',
+    name: site.lab.name,
+    url: site.lab.url,
+  },
   alumniOf: {
     '@type': 'CollegeOrUniversity',
     name: 'Morgan State University',

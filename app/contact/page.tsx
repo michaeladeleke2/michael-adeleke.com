@@ -28,6 +28,28 @@ export default function ContactPage() {
             </a>
           </dd>
         </div>
+        <div className="grid grid-cols-[7rem_minmax(0,1fr)] items-baseline gap-4 border-b border-hairline py-5">
+          <dt className="text-xs text-ink-muted">Also</dt>
+          <dd>
+            <a
+              href={`mailto:${site.emailAlt}`}
+              className="break-words text-base text-accent underline underline-offset-[0.18em]"
+            >
+              {site.emailAlt}
+            </a>
+          </dd>
+        </div>
+        <div className="grid grid-cols-[7rem_minmax(0,1fr)] items-baseline gap-4 border-b border-hairline py-5">
+          <dt className="text-xs text-ink-muted">Lab</dt>
+          <dd>
+            <a
+              href={site.lab.url}
+              className="break-words text-base text-accent underline underline-offset-[0.18em]"
+            >
+              {site.lab.name} ({site.lab.short})
+            </a>
+          </dd>
+        </div>
         {profiles.map((p) => (
           <div
             key={p.label}
