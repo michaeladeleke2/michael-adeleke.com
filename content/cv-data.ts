@@ -107,6 +107,7 @@ const allPositions: Position[] = [
   {
     title: 'Information Technology Intern',
     org: 'Lavner Education',
+    location: 'Baltimore, MD',
     period: 'Jun 2022 – Aug 2022',
     start: '2022-06',
     end: '2022-08',

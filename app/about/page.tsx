@@ -109,23 +109,46 @@ export default function AboutPage() {
 
       <section className="mx-auto mt-12 max-w-[54rem]">
         <SectionHeading>Positions</SectionHeading>
-        <ul className="mt-6">
-          {positions.map((p) => (
-            <li
-              key={p.title + p.period}
-              className="grid gap-1 border-b border-hairline py-5 last:border-0 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-8"
-            >
-              <p className="text-xs text-ink-muted">{p.period}</p>
-              <div>
-                <p className="font-display text-base text-ink">{p.title}</p>
+        {/* An ordered list, because it is one: a spine with a marker per role,
+            read newest first. The marker for a role with no end date is drawn
+            in accent, so what is current is visible without reading a date.
+            The ring punches a hole in the spine so the marker sits on it
+            rather than over it. */}
+        <ol className="relative mt-8 border-l border-hairline pl-6 sm:pl-9">
+          {positions.map((p) => {
+            const current = !p.end
+            return (
+              <li key={p.title + p.period} className="relative pb-9 last:pb-0">
+                <span
+                  aria-hidden="true"
+                  className={`absolute -left-[28.5px] top-[0.4rem] h-[9px] w-[9px] rounded-full ring-4 ring-bg sm:-left-[40.5px] ${
+                    current ? 'bg-accent' : 'bg-ink-muted'
+                  }`}
+                />
+                <p className="text-xs text-ink-muted">
+                  {p.period}
+                  {/* A real space, not just the margin: without it this reads
+                      as "presentNow" to a screen reader. */}
+                  {current && (
+                    <>
+                      {' '}
+                      <span className="ml-1 font-display text-accent">Now</span>
+                    </>
+                  )}
+                </p>
+                <p className="mt-1 font-display text-base text-ink">
+                  {p.title}
+                </p>
                 <p className="mt-0.5 text-xs text-ink-muted">
                   {[p.org, p.location].filter(Boolean).join(', ')}
                 </p>
-                <p className="mt-1.5 text-sm text-ink-muted">{p.summary}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
+                <p className="mt-2 max-w-measure text-sm text-ink-muted">
+                  {p.summary}
+                </p>
+              </li>
+            )
+          })}
+        </ol>
       </section>
     </Shell>
   )
