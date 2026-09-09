@@ -7,6 +7,7 @@ import type { Photo } from '@/content/gallery'
 import { Carousel } from './carousel'
 
 export function GalleryGrid({ photos }: { photos: Photo[] }) {
+  const [view, setView] = useState<'grid' | 'carousel'>('grid')
   const [index, setIndex] = useState<number | null>(null)
   // Set for the one render before unmounting, so the overlay is
   // pointer-events-none for the whole exit. If the fade-out never completes —
@@ -83,43 +84,51 @@ export function GalleryGrid({ photos }: { photos: Photo[] }) {
 
   return (
     <>
-      <div className="mx-auto mt-10 max-w-[54rem]">
-        <Carousel
-          label="Gallery"
-          intervalMs={6000}
-          items={photos.map((p) => ({
-            id: p.id,
-            label: [p.where, p.when].filter(Boolean).join(', '),
-            thumbSrc: p.src,
-            thumbAlt: p.alt,
-          }))}
-          renderSlide={(i) => {
-            const photo = photos[i]
-            return (
-              <div>
-                <button
-                  type="button"
-                  ref={(el) => {
-                    triggersRef.current[i] = el
-                  }}
-                  onClick={() => open(i)}
-                  className="group block w-full text-left"
-                  aria-label={`Open ${photo.alt}`}
+      <div className="mt-8 flex items-center justify-center gap-1">
+        {(['grid', 'carousel'] as const).map((v) => (
+          <button
+            key={v}
+            type="button"
+            onClick={() => setView(v)}
+            aria-pressed={view === v}
+            className={`rounded-full px-4 py-1.5 font-display text-xs transition-colors duration-120 ${
+              view === v
+                ? 'bg-surface text-ink'
+                : 'text-ink-muted hover:text-ink'
+            }`}
+          >
+            {v === 'grid' ? 'Grid' : 'Slideshow'}
+          </button>
+        ))}
+      </div>
+
+      {view === 'grid' ? (
+        <ul className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {photos.map((photo, i) => (
+            <li key={photo.id}>
+              <button
+                type="button"
+                ref={(el) => {
+                  triggersRef.current[i] = el
+                }}
+                onClick={() => open(i)}
+                className="group block w-full text-left"
+                aria-label={`Open ${photo.alt}`}
+              >
+                {/* Cropped to one ratio so the grid stays regular and the
+                    captions align; the lightbox shows the full frame. */}
+                <motion.div
+                  layoutId={reduce ? undefined : `photo-${photo.id}`}
+                  className="aspect-[4/3] overflow-hidden rounded-[4px] border border-hairline bg-surface"
                 >
-                  <motion.div
-                    layoutId={reduce ? undefined : `photo-${photo.id}`}
-                    className="aspect-[3/2] overflow-hidden rounded-[4px] border border-hairline bg-surface"
-                  >
-                    <Image
-                      src={photo.src}
-                      alt={photo.alt}
-                      width={photo.width}
-                      height={photo.height}
-                      priority={i === 0}
-                      className="h-full w-full object-cover transition-transform duration-120 group-hover:scale-[1.01] motion-reduce:group-hover:scale-100"
-                    />
-                  </motion.div>
-                </button>
+                  <Image
+                    src={photo.src}
+                    alt={photo.alt}
+                    width={photo.width}
+                    height={photo.height}
+                    className="h-full w-full object-cover transition-transform duration-120 group-hover:scale-[1.015] motion-reduce:group-hover:scale-100"
+                  />
+                </motion.div>
                 {photo.caption && (
                   <p className="mt-3 text-sm text-ink">{photo.caption}</p>
                 )}
@@ -130,11 +139,64 @@ export function GalleryGrid({ photos }: { photos: Photo[] }) {
                 >
                   {[photo.where, photo.when].filter(Boolean).join(', ')}
                 </p>
-              </div>
-            )
-          }}
-        />
-      </div>
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div className="mx-auto mt-8 max-w-[54rem]">
+          <Carousel
+            label="Gallery"
+            intervalMs={6000}
+            items={photos.map((p) => ({
+              id: p.id,
+              label: [p.where, p.when].filter(Boolean).join(', '),
+              thumbSrc: p.src,
+              thumbAlt: p.alt,
+            }))}
+            renderSlide={(i) => {
+              const photo = photos[i]
+              return (
+                <div>
+                  <button
+                    type="button"
+                    ref={(el) => {
+                      triggersRef.current[i] = el
+                    }}
+                    onClick={() => open(i)}
+                    className="group block w-full text-left"
+                    aria-label={`Open ${photo.alt}`}
+                  >
+                    <motion.div
+                      layoutId={reduce ? undefined : `photo-${photo.id}`}
+                      className="aspect-[3/2] overflow-hidden rounded-[4px] border border-hairline bg-surface"
+                    >
+                      <Image
+                        src={photo.src}
+                        alt={photo.alt}
+                        width={photo.width}
+                        height={photo.height}
+                        priority={i === 0}
+                        className="h-full w-full object-cover"
+                      />
+                    </motion.div>
+                  </button>
+                  {photo.caption && (
+                    <p className="mt-3 text-sm text-ink">{photo.caption}</p>
+                  )}
+                  <p
+                    className={`text-xs text-ink-muted ${
+                      photo.caption ? 'mt-0.5' : 'mt-3'
+                    }`}
+                  >
+                    {[photo.where, photo.when].filter(Boolean).join(', ')}
+                  </p>
+                </div>
+              )
+            }}
+          />
+        </div>
+      )}
 
       <AnimatePresence>
         {active && (

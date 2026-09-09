@@ -34,6 +34,7 @@ dev server ends up serving stale chunks. Stop dev first.
 | SensDS walkthrough figures | `public/research/sensds/`, built by `scripts/build-research-figures.py` |
 | Headshot | `public/headshot.jpg` (400x400; display at 12rem or under to stay above 2x) |
 | OG card | `public/og.png` |
+| Favicon | `app/icon.svg` + `app/apple-icon.png` (same geometry; keep them in step) |
 | Hero + OG build script | `scripts/build-hero-capture.py` (see below) |
 
 ## Rules that are load-bearing
@@ -78,7 +79,10 @@ reflection is evidence of attendance, not of teaching skill. Do not weaken this
 check to get a build through.
 
 **Carousels auto-advance, and that is the one exception to the rule below.**
-`components/carousel.tsx` rotates the SensDS walkthrough and the gallery. It
+`components/carousel.tsx` rotates the SensDS walkthrough, and the gallery when
+the reader switches to Slideshow. The gallery defaults to the grid: a grid is
+better for scanning fourteen photos, the carousel is better for dwelling on
+one, so both are offered rather than one being imposed. It
 never starts under `prefers-reduced-motion`, pauses on hover and on keyboard
 focus, stops permanently the moment the reader navigates or clicks into a
 slide, and always shows a pause control. WCAG 2.2.2 requires that last one for
