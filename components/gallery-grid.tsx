@@ -108,9 +108,11 @@ export function GalleryGrid({ photos }: { photos: Photo[] }) {
                   className="h-full w-full object-cover transition-transform duration-120 group-hover:scale-[1.015] motion-reduce:group-hover:scale-100"
                 />
               </motion.div>
-              <p className="mt-3 text-sm text-ink">{photo.caption}</p>
-              <p className="mt-0.5 text-xs text-ink-muted">
-                {photo.where}, {photo.when}
+              {photo.caption && (
+                <p className="mt-3 text-sm text-ink">{photo.caption}</p>
+              )}
+              <p className={`text-xs text-ink-muted ${photo.caption ? 'mt-0.5' : 'mt-3'}`}>
+                {[photo.where, photo.when].filter(Boolean).join(', ')}
               </p>
             </button>
           </li>
@@ -176,9 +178,11 @@ export function GalleryGrid({ photos }: { photos: Photo[] }) {
             </motion.div>
 
             <div className="mt-5 max-w-measure text-center">
-              <p className="text-sm text-ink">{active.caption}</p>
-              <p className="mt-1 text-xs text-ink-muted">
-                {active.where}, {active.when}
+              {active.caption && (
+                <p className="text-sm text-ink">{active.caption}</p>
+              )}
+              <p className={`text-xs text-ink-muted ${active.caption ? 'mt-1' : ''}`}>
+                {[active.where, active.when].filter(Boolean).join(', ')}
               </p>
             </div>
 

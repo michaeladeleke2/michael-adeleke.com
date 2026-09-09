@@ -21,7 +21,8 @@ indexed. **Flipping that one boolean to `true` is the launch.** Do it after the
 items below are done.
 
 
-- [ ] Add gallery photos to `public/gallery/` and describe them in `content/gallery.ts`
+- [ ] Write the `caption` field for each gallery photo in `content/gallery.ts` (event and year are filled in; the caption is what was happening and why it mattered)
+- [ ] Confirm you have permission to publish the camp photos — several show identifiable minors
 - [ ] Replace the example teaching entry with real AHE 603 portfolio entries
 - [ ] Confirm the contact email in `lib/site.ts` is the one you want public
 
