@@ -21,46 +21,42 @@ export default function AboutPage() {
       <div className="mx-auto mt-10 grid max-w-[54rem] gap-12 lg:grid-cols-[minmax(0,34rem)_minmax(0,16rem)]">
         <div className="text-base text-ink [&>*+*]:mt-[1.1em]">
           <p>
-            I am a PhD student in computer science at the University of
-            Alabama, in Chris Crawford&rsquo;s Human-Technology Interaction
-            Lab. My work sits between two things that look separate and are
-            not: radar sensing, and how people learn machine learning.
+            I am a PhD student in Computer Science at the University of Alabama, working
+            in Dr. Chris Crawford&rsquo;s Human-Technology Interaction Lab. My work sits
+            between two things that look separate but are not: radar sensing and how
+            people learn machine learning.
           </p>
           <p>
-            The sensing side is micro-Doppler. A 60 GHz radar sensor returns a
-            signal that, once you put it through a range FFT, clutter
-            suppression, and a short-time Fourier transform, becomes an image
-            of motion over time, a spectrogram in which a wave of the hand has
-            a shape you can recognize. I care about what those systems can do
-            as interfaces, and about the gap between how they behave in a lab
-            and how they behave in a room full of people who did not read the
-            manual.
+            The sensing side is micro-Doppler. A 60 GHz radar sensor returns a signal
+            that, once processed through a range FFT, clutter suppression, and a
+            short-time Fourier transform, becomes an image of motion over time: a
+            spectrogram in which a wave of the hand has a shape you can recognize. I care
+            about what these systems can do as interfaces and about the gap between how
+            they behave in a lab and how they behave in a room full of people who did not
+            read the manual.
           </p>
           <p>
-            That gap is where the education work comes from. Machine learning
-            is usually taught on datasets that have already been cleaned,
-            labeled, and balanced by someone else, which quietly removes every
-            decision that matters. SensDS, the system I build, hands those
-            decisions back: students collect their own radar data, train on it,
-            and watch the model fail in ways that are legible. A novelty
-            detector I added as an engineering feature, flagging captures that
-            fall outside the training distribution, turned out to be the best
-            teaching moment in the system, because it makes distribution shift
-            something that happens to you rather than a term in a lecture.
+            That gap is where the education work comes from. Machine learning is usually
+            taught on datasets that have already been cleaned, labeled, and balanced by
+            someone else, quietly removing many of the decisions that matter. SensDS, the
+            system I am building, hands those decisions back: students collect their own
+            radar data, train on it, and watch the model fail in ways that are legible. A
+            novelty detector I added as an engineering feature flags captures that fall
+            outside the training distribution. It also creates an opportunity to make
+            distribution shift something students can encounter directly rather than
+            simply a term discussed in a lecture.
           </p>
           <p>
-            Before Alabama I spent three years in Naja Mack&rsquo;s Human-AI
-            eXperience Lab at Morgan State, working on VR for concussion
-            education, bias in conversational AI, and K-12 computing outreach,
-            and coordinating the CodeBears summer camp across three summers. I
-            taught Introduction to Computer Science I there as adjunct faculty
-            in spring 2025. Most of what I believe about teaching came out of
-            those rooms.
+            Before Alabama, I spent three years in Dr. Naja Mack&rsquo;s Human-AI eXperience
+            Lab at Morgan State, working on VR for concussion education, bias in
+            conversational AI, and K–12 computing outreach. I also coordinated the
+            CodeBears summer camp across three summers and taught Introduction to Computer
+            Science I as adjunct faculty in spring 2025. Most of what I believe about
+            teaching came out of those rooms.
           </p>
           <p>
-            Where I am headed: sensing systems that are legible enough to learn
-            from, and computing classrooms where the hard parts are visible
-            instead of hidden.
+            Where I am headed: sensing systems that are legible enough to learn from, and
+            computing classrooms where the hard parts are visible instead of hidden.
           </p>
         </div>
 
@@ -123,7 +119,7 @@ export default function AboutPage() {
               <div>
                 <p className="font-display text-base text-ink">{p.title}</p>
                 <p className="mt-0.5 text-xs text-ink-muted">
-                  {p.org}, {p.location}
+                  {[p.org, p.location].filter(Boolean).join(', ')}
                 </p>
                 <p className="mt-1.5 text-sm text-ink-muted">{p.summary}</p>
               </div>
