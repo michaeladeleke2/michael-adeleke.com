@@ -49,9 +49,9 @@ export function HeroCapture() {
       width={W}
       height={H}
       decoding="async"
-      // Cropped to a strip on phones, where the full 5.4:1 frame would be
-      // only ~67px tall; full width and full time span from sm up.
-      className="h-full w-full object-cover sm:h-auto"
+      // Natural aspect at full width: it is a band running behind the type,
+      // so it must not be cropped or stretched.
+      className="block w-full"
     />
   )
 }

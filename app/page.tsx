@@ -33,7 +33,7 @@ const sections = [
   {
     href: '/research/',
     title: 'Research',
-    body: 'Radar sensing systems and the machine learning education platform built on them.',
+    body: 'Radar sensing, VR for learning, and K-12 computing outreach.',
   },
   {
     href: '/publications/',
@@ -63,8 +63,23 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
       />
 
-      <section className="overflow-hidden border-b border-hairline">
-        <div className="mx-auto max-w-shell px-5 pt-12 text-center sm:px-8 sm:pt-20">
+      <section className="relative overflow-hidden border-b border-hairline">
+        {/* The capture runs behind the type as a band, centred on the section
+            and dissolving into the page. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 flex items-center"
+        >
+          <div className="hero-capture-mask w-full">
+            <HeroCapture />
+          </div>
+          {/* See .hero-scrim in globals.css: it keeps --ink-muted above the
+              4.5:1 floor over the brightest and darkest pixels in the
+              capture, at every viewport width. */}
+          <div className="hero-scrim absolute inset-0" />
+        </div>
+
+        <div className="relative mx-auto max-w-shell px-5 py-16 text-center sm:px-8 sm:py-24">
           <h1 className="mx-auto max-w-[13ch] font-display text-3xl text-ink sm:text-4xl">
             {site.name}
           </h1>
@@ -75,19 +90,8 @@ export default function HomePage() {
             {site.role} at {site.affiliation}, in the Human-Technology
             Interaction Lab.
           </p>
-        </div>
-
-        {/* The capture sits in flow rather than behind the type, so its
-            clearance holds at every width. It still bleeds the full page. */}
-        <div className="mt-8 h-32 overflow-hidden bg-capture-field sm:mt-10 sm:h-auto">
-          <HeroCapture />
-        </div>
-        <div className="mx-auto max-w-shell px-5 py-4 text-center sm:px-8">
-          <p className="mx-auto max-w-measure text-xs text-ink-muted">
-            Micro-Doppler capture from SensDS, using an Infineon BGT60TR13C
-            60&nbsp;GHz radar. Time runs left to right; the vertical axis is
-            Doppler velocity, and the bright line through the centre is the
-            static return a hand gesture breaks away from.
+          <p className="mx-auto mt-6 text-xs text-ink-muted">
+            Behind: a micro-Doppler capture from SensDS
           </p>
         </div>
       </section>

@@ -100,6 +100,55 @@
 }
 
 @layer components {
+  /*
+   * Scrim over the home hero capture.
+   *
+   * Phones get a flat wash: the type spans nearly the full width, so there is
+   * no clear zone to carve out. From sm up the page colour is fully opaque
+   * across a 640px band centred on the section, which is wider than the
+   * 34rem (544px) measure the type is capped at, so the text always sits on
+   * plain page colour no matter the viewport. Anchoring that band in pixels
+   * rather than percentages is deliberate: a percentage band is narrower than
+   * the text at tablet widths, which is exactly where it would have failed.
+   */
+  .hero-scrim {
+    background: rgb(var(--bg) / 0.93);
+  }
+
+  /*
+   * Fades the capture out at its own top and bottom edges, so the band
+   * dissolves into the page instead of sitting in it as a hard-edged slab.
+   * The signal lives in the vertical middle of the frame, so it is untouched.
+   */
+  .hero-capture-mask {
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 26%,
+      #000 74%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 26%,
+      #000 74%,
+      transparent 100%
+    );
+  }
+
+  @media (min-width: 640px) {
+    .hero-scrim {
+      background: linear-gradient(
+        to right,
+        rgb(var(--bg) / 0.4) 0px,
+        rgb(var(--bg)) calc(50% - 320px),
+        rgb(var(--bg)) calc(50% + 320px),
+        rgb(var(--bg) / 0.4) 100%
+      );
+    }
+  }
+
   /* Long-form body copy: MDX portfolio entries and project write-ups. */
   .prose-body {
     max-width: 34rem;

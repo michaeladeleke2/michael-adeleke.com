@@ -40,8 +40,16 @@ DEFAULT_SOURCE = "media/sensds-micro-doppler-capture.gif"
 FIRST_FRAME = 0
 LAST_FRAME = 200
 CROP = (120, 401, 3015, 939)  # plot interior, ~+/-2.5 m/s
-STEP = 3  # every 3rd frame -> 16.7fps
-FRAME_MS = 60
+STEP = 3
+# The raw capture is 20ms/frame, so STEP 3 at 60ms would be real time. That
+# reads as frantic behind the type, so it runs at roughly 0.6x.
+FRAME_MS = 95
+# Frames near the end are repeated progressively more times. PIL merges
+# identical consecutive frames and sums their durations, so this comes out as
+# a genuine ease-out: the capture decelerates into its final frame instead of
+# stopping dead on it.
+EASE_TAIL = 14
+SETTLE = 10
 WIDTH = 1400
 QUALITY = 50
 
@@ -67,13 +75,19 @@ def frames(im: Image.Image):
 
 def build_capture(im: Image.Image):
     fs = list(frames(im))
+
+    eased = fs[:-EASE_TAIL]
+    for i, f in enumerate(fs[-EASE_TAIL:]):
+        eased.extend([f] * (1 + round(3 * ((i + 1) / EASE_TAIL) ** 2)))
+    eased.extend([fs[-1]] * SETTLE)
+
     os.makedirs("public/hero", exist_ok=True)
 
     # loop=1 plays the sequence once and holds the final frame.
-    fs[0].save(
+    eased[0].save(
         "public/hero/capture.webp",
         save_all=True,
-        append_images=fs[1:],
+        append_images=eased[1:],
         duration=FRAME_MS,
         loop=0,
         quality=QUALITY,
@@ -83,7 +97,8 @@ def build_capture(im: Image.Image):
 
     for p in ("public/hero/capture.webp", "public/hero/capture-still.webp"):
         print(f"wrote {p} ({os.path.getsize(p) / 1024:.0f} KB)")
-    print(f"dimensions: {fs[0].size[0]}x{fs[0].size[1]}, {len(fs)} frames")
+    print(f"dimensions: {fs[0].size[0]}x{fs[0].size[1]}, "
+          f"{len(fs)} source frames -> {len(eased)} written")
     return fs[0].size
 
 

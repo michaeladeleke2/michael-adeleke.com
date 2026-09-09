@@ -3,7 +3,7 @@ import { nav, profiles, site } from '@/lib/site'
 
 export function Footer() {
   return (
-    <footer className="mt-16 border-t border-hairline">
+    <footer className="mt-10 border-t border-hairline">
       {/* One centred stack. The nav runs horizontally rather than as a tall
           column, which is what was opening a large void down the right side. */}
       <div className="mx-auto max-w-[54rem] px-5 py-8 text-center sm:px-8">
