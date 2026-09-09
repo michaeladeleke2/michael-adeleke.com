@@ -30,7 +30,10 @@ export default function TeachingPage() {
 
       {philosophy && (
         <section className="mt-12">
-          <SectionHeading>Philosophy</SectionHeading>
+          <SectionHeading>Teaching philosophy statement</SectionHeading>
+          <p className="mt-2 text-center text-xs text-ink-muted">
+            Written for AHE 603, College and University Teaching
+          </p>
           <article className="mt-6 text-base text-ink">
             <Mdx source={philosophy} />
           </article>

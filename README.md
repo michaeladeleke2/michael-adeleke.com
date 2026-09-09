@@ -23,7 +23,6 @@ items below are done.
 
 - [ ] Add gallery photos to `public/gallery/` and describe them in `content/gallery.ts`
 - [ ] Replace the example teaching entry with real AHE 603 portfolio entries
-- [ ] Revise `content/teaching-philosophy.mdx` into your own voice
 - [ ] Confirm the contact email in `lib/site.ts` is the one you want public
 
 ## Deployment

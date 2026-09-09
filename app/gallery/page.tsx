@@ -21,9 +21,7 @@ export default function GalleryPage() {
         <GalleryGrid photos={photos} />
       ) : (
         <p className="mx-auto mt-10 max-w-measure text-center text-base text-ink-muted">
-          Photos are being added. Drop files into{' '}
-          <code>/public/gallery</code> and describe them in{' '}
-          <code>content/gallery.ts</code>.
+          Photos from conferences, camps, and the lab are on their way.
         </p>
       )}
     </Shell>
