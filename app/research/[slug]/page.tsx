@@ -78,12 +78,12 @@ export default async function ProjectPage({
         }
       />
 
-      <article className="mt-10 text-base text-ink">
+      <article className="mt-8 text-base text-ink">
         <Mdx source={project.body} />
       </article>
 
       {fm.links && fm.links.length > 0 && (
-        <div className="mx-auto mt-12 max-w-measure border-t border-hairline pt-6">
+        <div className="mx-auto mt-10 max-w-measure border-t border-hairline pt-6">
           <ul className="flex flex-wrap gap-x-6 gap-y-2">
             {fm.links.map((l) => (
               <li key={l.href + l.label}>

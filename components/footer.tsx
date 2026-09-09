@@ -6,7 +6,7 @@ export function Footer() {
     <footer className="mt-16 border-t border-hairline">
       {/* One centred stack. The nav runs horizontally rather than as a tall
           column, which is what was opening a large void down the right side. */}
-      <div className="mx-auto max-w-[54rem] px-5 py-10 text-center sm:px-8">
+      <div className="mx-auto max-w-[54rem] px-5 py-8 text-center sm:px-8">
         <p className="font-display text-sm font-semibold text-ink">
           {site.name}
         </p>
@@ -14,7 +14,7 @@ export function Footer() {
           {site.role}, {site.affiliation}
         </p>
 
-        <nav aria-label="Footer" className="mt-5">
+        <nav aria-label="Footer" className="mt-4">
           <ul className="flex flex-wrap justify-center gap-x-5 gap-y-2">
             {nav.map((item) => (
               <li key={item.href}>
@@ -50,7 +50,7 @@ export function Footer() {
           ))}
         </ul>
 
-        <p className="mt-6 text-xs text-ink-muted">
+        <p className="mt-5 text-xs text-ink-muted">
           © {new Date().getFullYear()} {site.name}
         </p>
       </div>

@@ -24,14 +24,14 @@ export default function PublicationsPage() {
         const items = publications.filter((p) => p.type === group.type)
         if (items.length === 0) return null
         return (
-          <section key={group.type} className="mt-12">
+          <section key={group.type} className="mt-10">
             <SectionHeading>{group.heading}</SectionHeading>
             <PublicationList items={items} />
           </section>
         )
       })}
 
-      <section className="mt-14">
+      <section className="mt-12">
         <SectionHeading>Presentations and research competitions</SectionHeading>
         <ul className="mx-auto mt-6 max-w-list">
           {presentations.map((p) => (
@@ -58,7 +58,7 @@ export default function PublicationsPage() {
         </ul>
       </section>
 
-      <section className="mt-14">
+      <section className="mt-12">
         <SectionHeading>Awards, honors, and fellowships</SectionHeading>
         <ul className="mx-auto mt-6 max-w-list">
           {awards.map((a) => (

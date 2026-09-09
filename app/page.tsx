@@ -64,11 +64,11 @@ export default function HomePage() {
       />
 
       <section className="overflow-hidden border-b border-hairline">
-        <div className="mx-auto max-w-shell px-5 pt-16 text-center sm:px-8 sm:pt-24">
+        <div className="mx-auto max-w-shell px-5 pt-12 text-center sm:px-8 sm:pt-20">
           <h1 className="mx-auto max-w-[13ch] font-display text-3xl text-ink sm:text-4xl">
             {site.name}
           </h1>
-          <p className="mx-auto mt-5 max-w-measure text-lg text-ink">
+          <p className="mx-auto mt-4 max-w-measure text-lg text-ink">
             {site.tagline}
           </p>
           <p className="mx-auto mt-3 max-w-measure text-sm text-ink-muted">
@@ -79,7 +79,7 @@ export default function HomePage() {
 
         {/* The capture sits in flow rather than behind the type, so its
             clearance holds at every width. It still bleeds the full page. */}
-        <div className="mt-10 h-32 overflow-hidden bg-capture-field sm:mt-12 sm:h-auto">
+        <div className="mt-8 h-32 overflow-hidden bg-capture-field sm:mt-10 sm:h-auto">
           <HeroCapture />
         </div>
         <div className="mx-auto max-w-shell px-5 py-4 text-center sm:px-8">
@@ -93,7 +93,7 @@ export default function HomePage() {
       </section>
 
       <div className="mx-auto max-w-shell px-5 sm:px-8">
-        <section className="grid gap-5 py-12 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="grid gap-5 py-10 sm:grid-cols-2 lg:grid-cols-4">
           {sections.map((s) => (
             <Link
               key={s.href}
@@ -108,9 +108,9 @@ export default function HomePage() {
           ))}
         </section>
 
-        <section className="border-t border-hairline py-8 text-center">
+        <section className="border-t border-hairline py-6 text-center">
           <h2 className="sr-only">Recent</h2>
-          <ul className="mx-auto max-w-measure space-y-2">
+          <ul className="mx-auto max-w-[54rem] space-y-1.5">
             {latestTalk && (
               <li className="text-sm text-ink-muted">
                 Presented{' '}

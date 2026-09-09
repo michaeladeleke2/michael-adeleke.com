@@ -20,7 +20,7 @@ export default function GalleryPage() {
       {photos.length > 0 ? (
         <GalleryGrid photos={photos} />
       ) : (
-        <p className="mx-auto mt-10 max-w-measure text-center text-base text-ink-muted">
+        <p className="mx-auto mt-8 max-w-measure text-center text-base text-ink-muted">
           Photos from conferences, camps, and the lab are on their way.
         </p>
       )}

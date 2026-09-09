@@ -29,7 +29,7 @@ export default function TeachingPage() {
       />
 
       {philosophy && (
-        <section className="mt-12">
+        <section className="mt-10">
           <SectionHeading>Teaching philosophy statement</SectionHeading>
           <p className="mt-2 text-center text-xs text-ink-muted">
             Written for AHE 603, College and University Teaching
@@ -40,7 +40,7 @@ export default function TeachingPage() {
         </section>
       )}
 
-      <section className="mt-16">
+      <section className="mt-12">
         <SectionHeading>Portfolio</SectionHeading>
         {groups.length === 0 ? (
           <p className="mx-auto mt-6 max-w-measure text-center text-base text-ink-muted">
@@ -48,7 +48,7 @@ export default function TeachingPage() {
             <code>content/teaching</code> carrying all four required sections.
           </p>
         ) : (
-          <div className="mt-8 space-y-12">
+          <div className="mt-7 space-y-10">
             {groups.map((group) => (
               <div key={group.theme}>
                 <h3 className="text-center font-display text-lg text-ink">{group.theme}</h3>

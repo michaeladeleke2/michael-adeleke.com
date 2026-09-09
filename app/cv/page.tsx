@@ -24,7 +24,7 @@ export default function CvPage() {
         }
       />
 
-      <div className="mt-8 overflow-hidden rounded-[4px] border border-hairline bg-surface">
+      <div className="mt-6 overflow-hidden rounded-[4px] border border-hairline bg-surface">
         <object
           data={CV_PATH}
           type="application/pdf"

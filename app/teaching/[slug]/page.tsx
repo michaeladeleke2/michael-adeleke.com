@@ -87,12 +87,12 @@ export default async function TeachingEntryPage({
         }
       />
 
-      <article className="mt-10 text-base text-ink">
+      <article className="mt-8 text-base text-ink">
         <Mdx source={entry.body} />
       </article>
 
       {fm.artifacts && fm.artifacts.length > 0 && (
-        <section className="mx-auto mt-12 max-w-measure border-t border-hairline pt-6">
+        <section className="mx-auto mt-10 max-w-measure border-t border-hairline pt-6">
           <h2 className="font-display text-base text-ink">Artifacts</h2>
           <ul className="mt-3 space-y-2">
             {fm.artifacts.map((a) => (

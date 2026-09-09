@@ -18,7 +18,7 @@ export default function AboutPage() {
       {/* Two columns, centred as a block. The grid is capped at its own
           content width so it sits in the middle of the shell rather than
           hugging the left edge with dead space on the right. */}
-      <div className="mx-auto mt-12 grid max-w-[54rem] gap-12 lg:grid-cols-[minmax(0,34rem)_minmax(0,16rem)]">
+      <div className="mx-auto mt-10 grid max-w-[54rem] gap-12 lg:grid-cols-[minmax(0,34rem)_minmax(0,16rem)]">
         <div className="text-base text-ink [&>*+*]:mt-[1.1em]">
           <p>
             I am a PhD student in computer science at the University of
@@ -111,7 +111,7 @@ export default function AboutPage() {
         </aside>
       </div>
 
-      <section className="mx-auto mt-16 max-w-[54rem]">
+      <section className="mx-auto mt-12 max-w-[54rem]">
         <SectionHeading>Positions</SectionHeading>
         <ul className="mt-6">
           {positions.map((p) => (
