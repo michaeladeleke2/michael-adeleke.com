@@ -9,7 +9,7 @@ Needs a video decoder:  python3 -m pip install imageio imageio-ffmpeg
 system-wide.)
 
 Outputs:
-  public/hero/capture.webp        animated, plays once and eases to a stop
+  public/hero/capture.mp4         looping H.264 video, hardware decoded
   public/hero/capture-still.webp  first frame: the poster, and what reduced
                                   motion gets
   public/og.png                   Open Graph card, from a real frame
@@ -47,11 +47,9 @@ DEFAULT_SOURCE = "media/sensds-hero-capture.mov"
 OUT_W = 1400
 BAND = 5.38            # output aspect ratio, matching the hero layout
 CENTRE = 0.465         # vertical centre of the signal, as a fraction of height
-FRAME_MS = 110         # per unique frame
-MAX_FRAMES = 60        # ~6.5s; the whole recording would run 19s
-EASE_TAIL = 14
-SETTLE = 10
-QUALITY = 48
+FPS = 12               # constant rate; the loop has no ease, so it rejoins cleanly
+MAX_FRAMES = 60        # 5s at 12fps
+CRF = 26               # x264 quality; 66 KB at 1400x260
 
 
 def load(path):
@@ -129,19 +127,27 @@ def main(src):
         for f in uniq
     ]
 
-    eased = picked[:-EASE_TAIL]
-    for i, f in enumerate(picked[-EASE_TAIL:]):
-        eased.extend([f] * (1 + round(3 * ((i + 1) / EASE_TAIL) ** 2)))
-    eased.extend([picked[-1]] * SETTLE)
-
     os.makedirs("public/hero", exist_ok=True)
-    eased[0].save("public/hero/capture.webp", save_all=True,
-                  append_images=eased[1:], duration=FRAME_MS, loop=1,
-                  quality=QUALITY, method=6)
+    # H.264 rather than animated WebP: a WebP is decoded frame by frame on the
+    # CPU, which is what made this stutter. A video element is hardware
+    # decoded, loops natively, and is a fraction of the size.
+    iio.mimwrite(
+        "public/hero/capture.mp4",
+        [np.asarray(f) for f in picked],
+        fps=FPS,
+        codec="libx264",
+        macro_block_size=2,
+        ffmpeg_params=[
+            "-crf", str(CRF),
+            "-pix_fmt", "yuv420p",
+            "-movflags", "+faststart",
+            "-preset", "slow",
+        ],
+    )
     picked[0].save("public/hero/capture-still.webp", quality=82, method=6)
-    for p in ("public/hero/capture.webp", "public/hero/capture-still.webp"):
+    for p in ("public/hero/capture.mp4", "public/hero/capture-still.webp"):
         print(f"  wrote {p} ({os.path.getsize(p)/1024:.0f} KB)")
-    print(f"  {OUT_W}x{out_h}, {len(picked)} unique -> {len(eased)} written")
+    print(f"  {OUT_W}x{out_h}, {len(picked)} frames @ {FPS}fps = {len(picked)/FPS:.1f}s loop")
 
     build_og(picked[len(picked) // 2])
 

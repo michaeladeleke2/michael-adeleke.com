@@ -29,7 +29,7 @@ dev server ends up serving stale chunks. Stop dev first.
 | Teaching portfolio | `content/teaching/*.mdx`, `content/teaching-philosophy.mdx` |
 | Gallery photos | `public/gallery/` + `content/gallery.ts` |
 | CV PDF | `public/cv/michael-adeleke-cv.pdf` — keep this path stable, it is linked from application materials |
-| Home hero capture | `public/hero/capture.webp` + `capture-still.webp` |
+| Home hero capture | `public/hero/capture.mp4` + `capture-still.webp` |
 | Master screen recordings | `media/sensds-*.gif`, `media/sensds-hero-capture.mov` (tracked) |
 | SensDS walkthrough figures | `public/research/sensds/`, built by `scripts/build-research-figures.py` |
 | Headshot | `public/headshot.jpg` (400x400; display at 12rem or under to stay above 2x) |
@@ -89,17 +89,20 @@ slide, and always shows a pause control. WCAG 2.2.2 requires that last one for
 anything moving longer than five seconds. Do not remove it.
 
 **One non-user-triggered animation, on the home hero.** It is a real
-micro-Doppler capture from SensDS, authored with a WebP loop count of 1: it
-plays through once and holds its final frame. It does not loop. Everything else
+micro-Doppler capture from SensDS, looping on a 5s cycle behind the type.
+Everything else
 on the site responds to a click, hover, or route change. No scroll-triggered
 fade-ups, no typewriter, no count-ups, no parallax. Every animation is wrapped
 in a `prefers-reduced-motion` check — the hero never requests the animated file
 at all under reduced motion.
 
-**The hero is an `<img>`, not `next/image`.** `next/image` puts animated WebP
-through its loader and drops the animation. It is also loaded in two stages:
-the 10 KB still renders first so it, not the 652 KB animation, is the largest
-contentful paint.
+**The hero is a `<video>`, and it loops.** It was an animated WebP that played
+once and held. Two problems: an animated WebP is decoded frame by frame on the
+CPU, which visibly stuttered, and holding on a final frame reads as broken
+rather than deliberate once you are looking at it. H.264 is hardware decoded,
+loops natively, and is 66 KB against 393. Under reduced motion the video is
+never mounted and the 20 KB still poster renders instead, so the file is not
+fetched at all.
 
 **`--capture-field` does not change between themes.** It matches the jet
 colormap's own background so the capture's letterbox is invisible. It belongs
@@ -126,8 +129,9 @@ PIL merges the duplicate frames and sums their durations, so a 112-frame clip
 came out as 11 frames held for over a second each.
 
 From the unique frames it keeps the liveliest 60, crops to a 5.38:1 band
-centred on the signal (`CENTRE`, `BAND`), and eases out by repeating tail
-frames on a curve. That is 393 KB for 9.5s.
+centred on the signal (`CENTRE`, `BAND`), and encodes at 12fps. That is 66 KB
+for a 5s loop. There is no ease-out: the clip loops, so it has to rejoin its
+own first frame cleanly.
 
 If you swap in a different recording, check `CENTRE` against the new framing;
 everything else adapts.

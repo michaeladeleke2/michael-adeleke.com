@@ -3,54 +3,58 @@
 import { useEffect, useState } from 'react'
 
 const STILL = '/hero/capture-still.webp'
-const ANIMATED = '/hero/capture.webp'
+const VIDEO = '/hero/capture.mp4'
 const W = 1400
 const H = 260
 
 /**
- * A real micro-Doppler capture from SensDS, cropped to the signal band.
+ * A real micro-Doppler capture from SensDS, cropped to the signal band and
+ * running behind the type.
  *
- * The still is what renders first, so the largest paint is a 10 KB image
- * rather than the 652 KB animation. The animation is fetched after mount and
- * swapped in once decoded; it is authored with a loop count of 1, so it plays
- * through once and holds its final frame. That keeps the home page to a single
- * non-user-triggered moment rather than something that loops at the reader.
+ * This is a video element, not an animated image. An animated WebP is decoded
+ * frame by frame on the CPU, which made it stutter; H.264 is hardware
+ * decoded, loops natively, and is a fraction of the size (66 KB against 393).
  *
- * Under reduced motion the animation is never requested at all.
+ * Under reduced motion the video is never mounted at all and the still poster
+ * is what renders, so the file is not even fetched.
  */
 export function HeroCapture() {
-  const [src, setSrc] = useState(STILL)
+  const [motionOk, setMotionOk] = useState(false)
 
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-
-    let cancelled = false
-    const pre = new Image()
-    pre.src = ANIMATED
-    pre.decode?.()
-      .then(() => {
-        if (!cancelled) setSrc(ANIMATED)
-      })
-      .catch(() => {
-        // Decode is best-effort; the still is a correct final state on its own.
-      })
-
-    return () => {
-      cancelled = true
-    }
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const sync = () => setMotionOk(!mq.matches)
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
   }, [])
 
+  if (!motionOk) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element -- static export,
+      // and next/image would add no value to a fixed-size decorative band.
+      <img
+        src={STILL}
+        alt=""
+        width={W}
+        height={H}
+        decoding="async"
+        className="block w-full"
+      />
+    )
+  }
+
   return (
-    // eslint-disable-next-line @next/next/no-img-element -- next/image rewrites
-    // animated WebP through its loader and drops the animation.
-    <img
-      src={src}
-      alt="Micro-Doppler spectrogram captured with a 60 GHz radar sensor: a bright zero-Doppler return running the width of the frame, with hand-gesture sidebands breaking above and below it."
+    <video
+      src={VIDEO}
+      poster={STILL}
       width={W}
       height={H}
-      decoding="async"
-      // Natural aspect at full width: it is a band running behind the type,
-      // so it must not be cropped or stretched.
+      autoPlay
+      loop
+      muted
+      playsInline
+      aria-hidden="true"
       className="block w-full"
     />
   )
