@@ -29,17 +29,6 @@ export default function ContactPage() {
           </dd>
         </div>
         <div className="grid grid-cols-[7rem_minmax(0,1fr)] items-baseline gap-4 border-b border-hairline py-5">
-          <dt className="text-xs text-ink-muted">Also</dt>
-          <dd>
-            <a
-              href={`mailto:${site.emailAlt}`}
-              className="break-words text-base text-accent underline underline-offset-[0.18em]"
-            >
-              {site.emailAlt}
-            </a>
-          </dd>
-        </div>
-        <div className="grid grid-cols-[7rem_minmax(0,1fr)] items-baseline gap-4 border-b border-hairline py-5">
           <dt className="text-xs text-ink-muted">Lab</dt>
           <dd>
             <a
