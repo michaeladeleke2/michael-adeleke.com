@@ -3,10 +3,15 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Mdx } from '@/components/mdx'
 import { PageHeader, Shell } from '@/components/page-header'
-import { getTeachingEntries, getTeachingEntry } from '@/lib/content'
+import { getTeachingEntry, getTeachingSlugs } from '@/lib/content'
+
+// With output: 'export', a dynamic route whose generateStaticParams returns an
+// empty array is rejected unless this is set. It legitimately returns empty
+// when every entry is a draft.
+export const dynamicParams = false
 
 export function generateStaticParams() {
-  return getTeachingEntries().map((e) => ({ slug: e.slug }))
+  return getTeachingSlugs().map((slug) => ({ slug }))
 }
 
 const dateFormat = new Intl.DateTimeFormat('en-US', {

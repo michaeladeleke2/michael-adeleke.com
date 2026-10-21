@@ -44,8 +44,8 @@ export default function TeachingPage() {
         <SectionHeading>Portfolio</SectionHeading>
         {groups.length === 0 ? (
           <p className="mx-auto mt-6 max-w-measure text-center text-base text-ink-muted">
-            Entries are being added. Each is an MDX file in{' '}
-            <code>content/teaching</code> carrying all four required sections.
+            Portfolio entries from AHE 603, College and University Teaching,
+            are being written up and will be added through the fall.
           </p>
         ) : (
           <div className="mt-7 space-y-10">

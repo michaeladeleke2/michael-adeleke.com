@@ -6,6 +6,11 @@ import { FigureCarousel } from '@/components/figure-carousel'
 import { PageHeader, Shell } from '@/components/page-header'
 import { getProject, getProjects } from '@/lib/content'
 
+// With output: 'export', a dynamic route whose generateStaticParams returns an
+// empty array is rejected unless this is set. It legitimately returns empty
+// when every entry is a draft.
+export const dynamicParams = false
+
 export function generateStaticParams() {
   return getProjects().map((p) => ({ slug: p.slug }))
 }

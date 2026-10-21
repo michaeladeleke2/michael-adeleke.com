@@ -99,6 +99,22 @@ function assertTeachingSections(entry: Entry<TeachingFrontmatter>) {
   }
 }
 
+/**
+ * Every slug on disk, drafts included. Only `generateStaticParams` uses this:
+ * `output: 'export'` rejects a dynamic route whose params come back empty, and
+ * they legitimately do when every entry is still a draft. The page itself
+ * looks the slug up through getTeachingEntry, which excludes drafts, so a
+ * draft slug resolves to notFound rather than rendering.
+ */
+export function getTeachingSlugs(): string[] {
+  const dir = path.join(CONTENT_DIR, 'teaching')
+  if (!fs.existsSync(dir)) return []
+  return fs
+    .readdirSync(dir)
+    .filter((f) => f.endsWith('.mdx'))
+    .map((f) => f.replace(/\.mdx$/, ''))
+}
+
 export function getTeachingEntries(): Entry<TeachingFrontmatter>[] {
   const entries = readCollection<TeachingFrontmatter>('teaching')
   entries.forEach(assertTeachingSections)
