@@ -44,8 +44,8 @@ export const publications: Publication[] = [
       'Michael B. Adeleke',
       'Vincent Ingram',
       'Elijah Ballou',
-      'Jamika K. Briggs-Belt',
-      'Alexis Jordan',
+      'Jayden K. Briggs-Belt',
+      'Antwain Jordan',
     ],
     year: 2024,
     title:
@@ -57,7 +57,7 @@ export const publications: Publication[] = [
   },
   {
     id: 'chi-ea-2025-culturally-relevant-math',
-    type: 'extended-abstract',
+    type: 'conference',
     authors: [
       'Naja A. Mack',
       'Clyde W. Tandjong',
@@ -76,16 +76,6 @@ export const publications: Publication[] = [
     pages: '6 pages',
     doi: '10.1145/3706599.3719835',
   },
-  {
-    id: 'sigcse-under-review-radar-tool',
-    type: 'under-review',
-    authors: ['Michael B. Adeleke'],
-    year: 2026,
-    title:
-      'A radar-based tool for teaching machine learning to high school students',
-    venue: 'ACM Technical Symposium on Computer Science Education',
-    venueShort: 'SIGCSE',
-  },
 ]
 
 export const publicationGroups: {
@@ -93,6 +83,4 @@ export const publicationGroups: {
   heading: string
 }[] = [
   { type: 'conference', heading: 'Peer-reviewed conference papers' },
-  { type: 'extended-abstract', heading: 'Extended abstracts' },
-  { type: 'under-review', heading: 'Manuscripts under review' },
 ]

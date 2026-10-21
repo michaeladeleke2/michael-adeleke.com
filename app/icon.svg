@@ -1,10 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Michael Adeleke">
   <rect width="32" height="32" rx="7" fill="#A31621"/>
-  <g fill="#FFF7F4">
-    <rect x="3.5" y="14.9" width="25" height="2.2" rx="1.1"/>
-    <rect x="9" y="10.6" width="14" height="1.9" rx="0.95" opacity="0.82"/>
-    <rect x="9" y="19.5" width="14" height="1.9" rx="0.95" opacity="0.82"/>
-    <rect x="12.5" y="6.6" width="7" height="1.7" rx="0.85" opacity="0.55"/>
-    <rect x="12.5" y="23.7" width="7" height="1.7" rx="0.85" opacity="0.55"/>
+  <g stroke="#FFF7F4" fill="none" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M4.6 18.6V6.6l6.4 6.8 6.4-6.8v12" stroke-width="3"/>
+    <path d="M19.6 18.6 24.3 6.6 29 18.6" stroke-width="3"/>
+    <path d="M21.6 15.1H27" stroke-width="2.3"/>
   </g>
+  <rect x="7" y="23.2" width="18" height="1.7" rx="0.85" fill="#FFF7F4"/>
 </svg>

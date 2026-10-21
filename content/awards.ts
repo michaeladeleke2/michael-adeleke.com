@@ -11,11 +11,13 @@ export const awards: Award[] = [
     id: 'sreb-fellow',
     title: 'SREB Doctoral Fellow',
     org: 'The University of Alabama',
+    year: '2025 – present',
   },
   {
     id: 'graduate-council-fellow',
     title: 'Graduate Council Fellow',
     org: 'The University of Alabama',
+    year: '2025 – present',
   },
   {
     id: 'tapia-2024-third',

@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { PageHeader, SectionHeading, Shell } from '@/components/page-header'
 import {
   education,
+  memberships,
   positions,
   researchInterests,
   technicalSkills,
@@ -105,6 +106,17 @@ export default function AboutPage() {
               {researchInterests.map((r) => (
                 <li key={r} className="text-xs text-ink-muted">
                   {r}
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section>
+            <SectionHeading align="left">Memberships</SectionHeading>
+            <ul className="mt-3 space-y-1.5">
+              {memberships.map((m) => (
+                <li key={m} className="text-xs text-ink-muted">
+                  {m}
                 </li>
               ))}
             </ul>

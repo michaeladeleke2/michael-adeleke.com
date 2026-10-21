@@ -52,27 +52,27 @@ const allPositions: Position[] = [
     period: 'Aug 2025 – present',
     start: '2025-08',
     summary:
-      'Radar-based sensing systems: signal behavior, data interpretation, and the interactive applications they support. Lead developer of SensDS.',
+      'Radar-based sensing systems: signal behavior, data interpretation, and the interactive applications they support. Lead developer of SensDSv2, and positioning radar sensing as a novel modality for ML and robotics education through a literature review spanning HCI, human-robot interaction, and computing education.',
   },
   {
     title: 'Program Coordinator, Summer AI Research Institute',
     org: 'Center for Equitable AI & Machine Learning Systems, Morgan State University',
     location: 'Baltimore, MD',
-    period: 'Summers 2025 and 2026',
+    period: 'Summers 2025 – 2026',
     start: '2025-05',
     end: '2026-08',
     summary:
-      'Coordinated 50+ undergraduate researchers across logistics, mentor management, and research workflow.',
+      'Coordinated and supported 87 undergraduate researchers across two summer cohorts, managing logistics, communication, mentor coordination, and research workflow through final presentations.',
   },
   {
-    title: 'Camp Coordinator',
-    org: 'CodeBears',
+    title: 'Camp Coordinator, CodeBears',
+    org: 'Human-AI eXperience Lab, Morgan State University',
     location: 'Baltimore, MD',
     period: 'Summers 2023 – 2025',
     start: '2023-06',
     end: '2025-08',
     summary:
-      'Three consecutive summers coordinating a K-12 computing camp introducing students to programming fundamentals.',
+      'Coordinated a K-12 computing camp for 160+ campers across three consecutive summers, extended the program to 100+ more students through Spring Break and Saturday Academy sessions, and reached 2,100+ K-12 students through STEM day outreach. Outcomes published at SIGCSE 2024 and BICE 2024.',
   },
   {
     title: 'Lead Undergraduate Researcher',
@@ -92,7 +92,7 @@ const allPositions: Position[] = [
     start: '2025-01',
     end: '2025-05',
     summary:
-      'Instructor of record for Introduction to Computer Science I, with curriculum development in computing and emerging technologies.',
+      'Instructor of record for Introduction to Computer Science I, teaching 15 students, with curriculum development in computing and emerging technologies.',
   },
   {
     title: 'Summer Research Assistant',
@@ -127,12 +127,13 @@ export type SkillGroup = { label: string; items: string[] }
 export const technicalSkills: SkillGroup[] = [
   {
     label: 'Languages',
-    items: ['Python', 'Java', 'C#', 'JavaScript', 'Node.js', 'Ruby'],
+    items: ['Python', 'Java', 'C#', 'JavaScript', 'Ruby'],
   },
   {
     label: 'Machine learning',
     items: [
       'PyTorch',
+      'Hugging Face Transformers',
       'scikit-learn',
       'Vision Transformers',
       'CNNs',
@@ -147,7 +148,6 @@ export const technicalSkills: SkillGroup[] = [
       'Range FFT',
       'MTI filtering',
       'STFT',
-      'Infineon BGT60TR13C radar',
       'MNE (EEG)',
       'EmotiBit physiological sensing',
     ],
@@ -155,6 +155,10 @@ export const technicalSkills: SkillGroup[] = [
   {
     label: 'Application development',
     items: [
+      'Node.js',
+      'Web Serial API',
+      'JavaScript library development',
+      'real-time browser visualization',
       'PyQt6',
       'pyqtgraph',
       'Unity',
@@ -164,10 +168,18 @@ export const technicalSkills: SkillGroup[] = [
     ],
   },
   {
-    label: 'Conversational AI',
-    items: ['IBM Watson Assistant', 'Dialogflow'],
+    label: 'Generative AI and LLMs',
+    items: ['Claude', 'Claude Code', 'ChatGPT', 'prompt engineering'],
   },
 ]
+
+export const memberships = [
+  'Association for Computing Machinery (ACM), Student Member',
+  'National Society of Black Engineers (NSBE), Member',
+]
+
+export const teachingInterests =
+  'Introductory programming, machine learning, human-computer interaction, and computing education.'
 
 export const researchInterests = [
   'Radar-based sensing and micro-Doppler signal processing',

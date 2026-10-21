@@ -15,6 +15,7 @@ export const presentations: Presentation[] = [
     venue:
       'International Conference on Applied Human Factors and Ergonomics (AHFE)',
     year: 2025,
+    role: 'Presenter',
   },
   {
     id: 'tapia-2024-codebears',
@@ -24,14 +25,6 @@ export const presentations: Presentation[] = [
     year: 2024,
     role: 'Poster and presentation',
     note: '3rd place',
-  },
-  {
-    id: 'tapia-2023-have-a-heart',
-    title: 'Have a Heart',
-    venue:
-      'ACM Student Research Competition, ACM Richard Tapia Celebration of Diversity in Computing',
-    year: 2023,
-    role: 'Co-author on award-winning submission',
   },
   {
     id: 'techfest-2023-collision-course',

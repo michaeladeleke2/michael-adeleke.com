@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { EntryCard } from '@/components/entry-card'
 import { Mdx } from '@/components/mdx'
 import { PageHeader, SectionHeading, Shell } from '@/components/page-header'
+import { teachingInterests } from '@/content/cv-data'
 import { getTeachingByTheme, getTeachingPhilosophy } from '@/lib/content'
 
 export const metadata: Metadata = {
@@ -33,6 +34,10 @@ export default function TeachingPage() {
           <SectionHeading>Teaching philosophy statement</SectionHeading>
           <p className="mt-2 text-center text-xs text-ink-muted">
             Written for AHE 603, College and University Teaching
+          </p>
+          <p className="mx-auto mt-5 max-w-measure text-center text-sm text-ink-muted">
+            <span className="text-ink">Teaching interests.</span>{' '}
+            {teachingInterests}
           </p>
           <article className="mt-6 text-base text-ink">
             <Mdx source={philosophy} />

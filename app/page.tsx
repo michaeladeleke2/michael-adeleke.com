@@ -1,8 +1,7 @@
 import Link from 'next/link'
 import { HeroCapture } from '@/components/hero-capture'
 import { profiles, site } from '@/lib/site'
-import { publications } from '@/content/publications'
-import { presentations } from '@/content/presentations'
+import { recent } from '@/content/recent'
 
 const personSchema = {
   '@context': 'https://schema.org',
@@ -58,9 +57,6 @@ const sections = [
 ]
 
 export default function HomePage() {
-  const underReview = publications.find((p) => p.type === 'under-review')
-  const latestTalk = presentations[0]
-
   return (
     <>
       <script
@@ -92,8 +88,17 @@ export default function HomePage() {
             {site.tagline}
           </p>
           <p className="mx-auto mt-3 max-w-measure text-sm text-ink-muted">
-            {site.role} at {site.affiliation}, in the Human-Technology
-            Interaction Lab.
+            {site.summary}
+          </p>
+          <p className="mx-auto mt-4 max-w-measure text-xs text-ink-muted">
+            {site.role} at {site.affiliation}, in the{' '}
+            <a
+              href={site.lab.url}
+              className="underline decoration-hairline underline-offset-[0.18em] transition-colors duration-120 hover:text-ink"
+            >
+              {site.lab.name}
+            </a>
+            .
           </p>
           <p className="mx-auto mt-6 text-xs text-ink-muted">
             Behind: a micro-Doppler capture from SensDS
@@ -120,24 +125,20 @@ export default function HomePage() {
         <section className="border-t border-hairline py-6 text-center">
           <h2 className="sr-only">Recent</h2>
           <ul className="mx-auto max-w-[54rem] space-y-1.5">
-            {latestTalk && (
-              <li className="text-sm text-ink-muted">
-                Presented{' '}
-                <Link
-                  href="/publications/"
-                  className="text-ink underline decoration-hairline underline-offset-[0.18em] transition-colors duration-120 hover:text-accent"
-                >
-                  {latestTalk.title}
-                </Link>{' '}
-                at AHFE {latestTalk.year}.
+            {recent.map((item) => (
+              <li key={item.text} className="text-sm text-ink-muted">
+                {item.href ? (
+                  <Link
+                    href={item.href}
+                    className="text-ink underline decoration-hairline underline-offset-[0.18em] transition-colors duration-120 hover:text-accent"
+                  >
+                    {item.text}
+                  </Link>
+                ) : (
+                  item.text
+                )}
               </li>
-            )}
-            {underReview && (
-              <li className="text-sm text-ink-muted">
-                {underReview.title} is under review at{' '}
-                {underReview.venueShort}.
-              </li>
-            )}
+            ))}
           </ul>
         </section>
       </div>

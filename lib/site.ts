@@ -3,11 +3,13 @@ export const site = {
   url: 'https://michael-adeleke.com',
   role: 'PhD student in Computer Science',
   affiliation: 'The University of Alabama',
-  // One sentence, used on the home hero and as the default meta description.
-  tagline:
-    'I build radar sensing systems and turn them into machine learning education people can actually touch.',
+  // The headline claim, set large on the home hero.
+  tagline: 'I build interactive technologies that make AI tangible.',
+  // The sentence under it, and the first half of the meta description.
+  summary:
+    'My research explores how people interact with intelligent systems and how emerging technologies can make computing more accessible, engaging, and understandable.',
   description:
-    'Michael Adeleke is a PhD student in Computer Science at the University of Alabama, working on radar-based sensing, micro-Doppler signal processing, and accessible machine learning education.',
+    'Michael Adeleke is a PhD student in Computer Science at the University of Alabama. He builds interactive technologies that make AI tangible, working on radar-based sensing, micro-Doppler signal processing, and accessible machine learning education.',
   /**
    * The institutional address leads: it signals the affiliation a program
    * chair is checking for. The personal one is kept as a fallback because
