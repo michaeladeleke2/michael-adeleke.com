@@ -30,7 +30,7 @@ dev server ends up serving stale chunks. Stop dev first.
 | Gallery photos | `public/gallery/` + `content/gallery.ts` |
 | CV PDF | `public/cv/michael-adeleke-cv.pdf` — keep this path stable, it is linked from application materials |
 | Home hero capture | `public/hero/capture.webp` + `capture-still.webp` |
-| Master screen recordings | `media/sensds-*.gif` (tracked) |
+| Master screen recordings | `media/sensds-*.gif`, `media/sensds-hero-capture.mov` (tracked) |
 | SensDS walkthrough figures | `public/research/sensds/`, built by `scripts/build-research-figures.py` |
 | Headshot | `public/headshot.jpg` (400x400; display at 12rem or under to stay above 2x) |
 | OG card | `public/og.png` |
@@ -109,23 +109,28 @@ same value in `:root` and `.dark`.
 ## Rebuilding the hero capture
 
 ```bash
+python3 -m pip install imageio imageio-ffmpeg   # once
 python3 scripts/build-hero-capture.py
 ```
 
-The master recording is tracked at `media/sensds-micro-doppler-capture.gif`, so
-the hero and the OG card can always be rebuilt from source.
+The master recording is tracked at `media/sensds-hero-capture.mov`, so the hero
+and the OG card can always be rebuilt from source. There is no system ffmpeg on
+this machine; `imageio-ffmpeg` bundles its own static binary, so nothing is
+installed system-wide.
 
-**Only frames 0-199 of that recording are usable.** Past frame 200 a mouse
-cursor drifts through the plot; around frame 342 a macOS system menu ("Screen
-Saver", "Lock Screen") drops over the middle of it; and from about frame 386
-the signal is flat because the recording is being stopped. The script crops to
-the plot interior at roughly +/-2.5 m/s, which also removes the axes and a
-stray cursor sitting in the upper right, and drops to 16.7fps. That takes the
-asset from 15.3 MB to 457 KB.
+**The recording is variable frame rate, and that matters.** The container
+reports ~14fps but the SensDS plot only redraws about 4.6 times a second, so
+most decoded frames are exact duplicates. The script dedupes before doing
+anything else. Skipping that step produces an animation that looks frozen:
+PIL merges the duplicate frames and sums their durations, so a 112-frame clip
+came out as 11 frames held for over a second each.
 
-If you ever swap in a different recording, re-check `FIRST_FRAME`, `LAST_FRAME`
-and `CROP` at the top of the script. They are specific to this capture, and the
-UI intrusions above are exactly the kind of thing that ships unnoticed.
+From the unique frames it keeps the liveliest 60, crops to a 5.38:1 band
+centred on the signal (`CENTRE`, `BAND`), and eases out by repeating tail
+frames on a curve. That is 393 KB for 9.5s.
+
+If you swap in a different recording, check `CENTRE` against the new framing;
+everything else adapts.
 
 ## Walkthrough figures on a project page
 

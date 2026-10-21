@@ -1,111 +1,153 @@
 """
-Builds the home hero assets from the raw SensDS screen recording.
+Builds the home hero assets, and the Open Graph card, from the master screen
+recording in media/.
 
-    python3 scripts/build-hero-capture.py [path/to/recording.gif]
+    python3 scripts/build-hero-capture.py
 
-The master recording is tracked in the repo at
-media/sensds-micro-doppler-capture.gif, so the assets below can always be
-rebuilt from source.
+Needs a video decoder:  python3 -m pip install imageio imageio-ffmpeg
+(imageio-ffmpeg bundles its own static ffmpeg, so nothing is installed
+system-wide.)
 
 Outputs:
-  public/hero/capture.webp        animated, plays once and holds the last frame
-  public/hero/capture-still.webp  first frame, the poster and the
-                                  reduced-motion rendering
-  public/og.png                   Open Graph card, built from a real frame
+  public/hero/capture.webp        animated, plays once and eases to a stop
+  public/hero/capture-still.webp  first frame: the poster, and what reduced
+                                  motion gets
+  public/og.png                   Open Graph card, from a real frame
 
 What the processing does, and why:
-  - Keeps only frames 0-199. Later frames carry a mouse cursor, a macOS
-    system menu over the plot, and a flat tail where the recording is
-    being stopped.
-  - Crops to the plot interior at roughly +/-2.5 m/s. The full plot is about
-    80% empty navy and carries a stray mouse cursor in the upper right; the
-    crop removes both and turns the capture into the horizontal band the
-    site's design is built around.
-  - Drops to every 3rd frame (16.7fps). The data is a discrete FFT waterfall,
-    so it does not read as dropped motion, and it takes the asset from
-    15.3 MB to under 500 KB.
+  - Crops to a 5.4:1 band centred on the signal. The raw frame is 16:9 and
+    mostly empty navy above and below; the band is the shape the hero layout
+    wants and the shape the site's whole visual language is built on.
+  - Picks the liveliest window rather than the opening seconds, scored by
+    inter-frame change.
+  - Eases out. Frames near the end are repeated progressively more times;
+    PIL merges identical consecutive frames and sums their durations, so the
+    capture decelerates into its final frame instead of stopping dead.
 """
 
+import glob
 import os
 import sys
 
+import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
-DEFAULT_SOURCE = "media/sensds-micro-doppler-capture.gif"
+try:
+    import imageio.v2 as iio
+except ImportError:
+    sys.exit("Needs: python3 -m pip install imageio imageio-ffmpeg")
 
-# Frames 0-199 are the only stretch free of every piece of UI. Past frame 200
-# a mouse cursor drifts through the band, around frame 342 a macOS system menu
-# ("Screen Saver", "Lock Screen") drops over the middle of the plot, and from
-# roughly frame 386 the signal is flat because the recording is being stopped.
-FIRST_FRAME = 0
-LAST_FRAME = 200
-CROP = (120, 401, 3015, 939)  # plot interior, ~+/-2.5 m/s
-STEP = 3
-# The raw capture is 20ms/frame, so STEP 3 at 60ms would be real time. That
-# reads as frantic behind the type, so it runs at roughly 0.6x.
-FRAME_MS = 95
-# Frames near the end are repeated progressively more times. PIL merges
-# identical consecutive frames and sums their durations, so this comes out as
-# a genuine ease-out: the capture decelerates into its final frame instead of
-# stopping dead on it.
+DEFAULT_SOURCE = "media/sensds-hero-capture.mov"
+
+# The recording is variable-rate: the container reports ~14fps but the plot
+# only redraws about 1.5 times a second, so roughly twelve of every thirteen
+# decoded frames are exact duplicates. Everything below works on unique frames
+# only, and plays them at the hero's own pace. That compresses the full
+# recording into a few seconds, which is the point: more of the signal is seen.
+OUT_W = 1400
+BAND = 5.38            # output aspect ratio, matching the hero layout
+CENTRE = 0.465         # vertical centre of the signal, as a fraction of height
+FRAME_MS = 110         # per unique frame
+MAX_FRAMES = 60        # ~6.5s; the whole recording would run 19s
 EASE_TAIL = 14
 SETTLE = 10
-WIDTH = 1400
-QUALITY = 50
+QUALITY = 48
 
 
-def load_source(path: str) -> Image.Image:
+def load(path):
     if not os.path.exists(path):
-        sys.exit(
-            f"Source recording not found: {path}\n"
-            "The master recording is tracked in the repo at "
-            "media/sensds-micro-doppler-capture.gif."
-        )
-    print(f"source: {path}")
-    return Image.open(path)
+        hits = [f for f in glob.glob("media/*.mov") + glob.glob("media/*.gif")]
+        sys.exit(f"Source not found: {path}\nIn media/: {hits}")
+    return path
 
 
-def frames(im: Image.Image):
-    for i in range(FIRST_FRAME, LAST_FRAME, STEP):
-        im.seek(i)
-        f = im.convert("RGB").crop(CROP)
-        h = round(WIDTH * f.size[1] / f.size[0])
-        yield f.resize((WIDTH, h), Image.LANCZOS)
+def read_frames(path):
+    r = iio.get_reader(path)
+    meta = r.get_meta_data()
+    fps = meta["fps"]
+    total = int(fps * meta["duration"])
+    frames = []
+    for i in range(total):
+        try:
+            frames.append(r.get_data(i))
+        except Exception:
+            break
+    r.close()
+    return frames, fps
 
 
-def build_capture(im: Image.Image):
-    fs = list(frames(im))
+def crop_box(h, w):
+    band_h = int(round(w / BAND))
+    top = int(round(h * CENTRE - band_h / 2))
+    top = max(0, min(h - band_h, top))
+    return (0, top, w, top + band_h)
 
-    eased = fs[:-EASE_TAIL]
-    for i, f in enumerate(fs[-EASE_TAIL:]):
+
+def liveliest(frames, want):
+    """Start index of the run of `want` frames with the most change in it."""
+    if len(frames) <= want:
+        return 0
+    small = [f[::8, ::8].astype(np.int16) for f in frames]
+    diff = np.array([0] + [int(np.abs(small[i] - small[i - 1]).sum())
+                           for i in range(1, len(small))])
+    best, score = 0, -1.0
+    for s in range(0, len(frames) - want):
+        m = diff[s:s + want].mean()
+        if m > score:
+            best, score = s, m
+    return best
+
+
+def dedupe(frames):
+    """Drop consecutive duplicates left by the variable-rate recording."""
+    out, prev = [], None
+    for f in frames:
+        key = f[::4, ::4].astype(np.int16)
+        if prev is None or np.abs(key - prev).sum() > 0:
+            out.append(f)
+            prev = key
+    return out
+
+
+def main(src):
+    frames, fps = read_frames(load(src))
+    h, w, _ = frames[0].shape
+    box = crop_box(h, w)
+    uniq = dedupe(frames)
+    print(f"source: {src}")
+    print(f"  {w}x{h}, {len(frames)} decoded frames @ {fps:.1f}fps nominal")
+    print(f"  unique frames: {len(uniq)}  (~{len(uniq)/ (len(frames)/fps):.2f} real updates/sec)")
+    print(f"  crop {box} -> {box[2]-box[0]}x{box[3]-box[1]} ({BAND:.2f}:1)")
+
+    start = liveliest(uniq, MAX_FRAMES)
+    uniq = uniq[start:start + MAX_FRAMES]
+    print(f"  keeping {len(uniq)} from index {start}")
+
+    out_h = round(OUT_W * (box[3] - box[1]) / (box[2] - box[0]))
+    picked = [
+        Image.fromarray(f).crop(box).resize((OUT_W, out_h), Image.LANCZOS)
+        for f in uniq
+    ]
+
+    eased = picked[:-EASE_TAIL]
+    for i, f in enumerate(picked[-EASE_TAIL:]):
         eased.extend([f] * (1 + round(3 * ((i + 1) / EASE_TAIL) ** 2)))
-    eased.extend([fs[-1]] * SETTLE)
+    eased.extend([picked[-1]] * SETTLE)
 
     os.makedirs("public/hero", exist_ok=True)
-
-    # loop=1 plays the sequence once and holds the final frame.
-    eased[0].save(
-        "public/hero/capture.webp",
-        save_all=True,
-        append_images=eased[1:],
-        duration=FRAME_MS,
-        loop=0,
-        quality=QUALITY,
-        method=6,
-    )
-    fs[0].save("public/hero/capture-still.webp", quality=82, method=6)
-
+    eased[0].save("public/hero/capture.webp", save_all=True,
+                  append_images=eased[1:], duration=FRAME_MS, loop=1,
+                  quality=QUALITY, method=6)
+    picked[0].save("public/hero/capture-still.webp", quality=82, method=6)
     for p in ("public/hero/capture.webp", "public/hero/capture-still.webp"):
-        print(f"wrote {p} ({os.path.getsize(p) / 1024:.0f} KB)")
-    print(f"dimensions: {fs[0].size[0]}x{fs[0].size[1]}, "
-          f"{len(fs)} source frames -> {len(eased)} written")
-    return fs[0].size
+        print(f"  wrote {p} ({os.path.getsize(p)/1024:.0f} KB)")
+    print(f"  {OUT_W}x{out_h}, {len(picked)} unique -> {len(eased)} written")
+
+    build_og(picked[len(picked) // 2])
 
 
-def font(size: int, bold: bool = False):
-    names = (
-        ["Arial Bold.ttf", "Helvetica.ttc"] if bold else ["Arial.ttf", "Helvetica.ttc"]
-    )
+def font(size, bold=False):
+    names = ["Arial Bold.ttf", "Helvetica.ttc"] if bold else ["Arial.ttf", "Helvetica.ttc"]
     for n in names:
         for d in ("/System/Library/Fonts/Supplemental/", "/System/Library/Fonts/", "/Library/Fonts/"):
             if os.path.exists(d + n):
@@ -116,30 +158,21 @@ def font(size: int, bold: bool = False):
     return ImageFont.load_default()
 
 
-def build_og(im: Image.Image):
-    """Open Graph card, using a real capture frame rather than a synthetic one."""
+def build_og(band):
     W, H = 1200, 630
-    BG, INK, INK_MUTED = (255, 255, 255), (26, 22, 20), (107, 98, 94)
-
-    im.seek(95)  # the busiest clean frame
-    band = im.convert("RGB").crop(CROP)
-    band = band.resize((W, round(W * band.size[1] / band.size[0])), Image.LANCZOS)
-
+    BG, INK, MUTED = (255, 255, 255), (26, 22, 20), (107, 98, 94)
+    b = band.resize((W, round(W * band.size[1] / band.size[0])), Image.LANCZOS)
     img = Image.new("RGB", (W, H), BG)
-    img.paste(band, (0, H - band.size[1]))
-
+    img.paste(b, (0, H - b.size[1]))
     d = ImageDraw.Draw(img)
-    d.text((72, 132), "Michael Adeleke", font=font(76, bold=True), fill=INK)
-    d.text((72, 250), "Radar sensing, micro-Doppler signal processing,", font=font(32), fill=INK)
-    d.text((72, 294), "and accessible machine learning education.", font=font(32), fill=INK)
-    d.text((72, 362), "PhD student in Computer Science, The University of Alabama", font=font(24), fill=INK_MUTED)
-
+    d.text((72, 150), "Michael Adeleke", font=font(76, bold=True), fill=INK)
+    d.text((72, 268), "I build interactive technologies", font=font(32), fill=INK)
+    d.text((72, 312), "that make AI tangible.", font=font(32), fill=INK)
+    d.text((72, 380), "PhD student in Computer Science, The University of Alabama",
+           font=font(24), fill=MUTED)
     img.save("public/og.png", optimize=True)
-    print(f"wrote public/og.png ({os.path.getsize('public/og.png') / 1024:.0f} KB)")
+    print(f"  wrote public/og.png ({os.path.getsize('public/og.png')/1024:.0f} KB)")
 
 
 if __name__ == "__main__":
-    src = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_SOURCE
-    im = load_source(src)
-    build_capture(im)
-    build_og(im)
+    main(sys.argv[1] if len(sys.argv) > 1 else DEFAULT_SOURCE)
