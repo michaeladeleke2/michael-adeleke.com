@@ -31,7 +31,7 @@ dev server ends up serving stale chunks. Stop dev first.
 | CV PDF | `public/cv/michael-adeleke-cv.pdf` — keep this path stable, it is linked from application materials |
 | Home hero capture | `public/hero/capture.mp4` + `capture-still.webp` |
 | Master screen recordings | `media/sensds-*.gif`, `media/sensds-hero-capture.mov` (tracked) |
-| SensDS walkthrough figures | `public/research/sensds/`, built by `scripts/build-research-figures.py` |
+| SensDS walkthrough tour | `public/research/sensds/tour.mp4`, built by `scripts/build-research-figures.py` |
 | Headshot | `public/headshot.jpg` (400x400; display at 12rem or under to stay above 2x) |
 | OG card | `public/og.png` |
 | Favicon | `app/icon.svg` + `app/apple-icon.png` (same geometry; keep them in step) |
@@ -150,22 +150,28 @@ everything else adapts.
 
 ## Walkthrough figures on a project page
 
-Add a `figures:` list to a project's MDX frontmatter and they render as a
-click-to-play sequence under the write-up. Each entry needs `src` (path with no
-extension), `width`, `height`, `label`, `caption` and `alt`; the build script
-writes `<src>.webp` and `<src>-still.webp`.
+Add a `figures:` list to a project's MDX frontmatter and it renders under the
+write-up: one entry renders on its own, several render as a carousel. Each
+needs `src` (path with no extension), `width`, `height`, `label`, `caption`
+and `alt`; the build script writes `<src>.mp4` and `<src>-still.webp`.
 
 ```bash
-python3 scripts/build-research-figures.py [name ...]
+python3 -m pip install imageio imageio-ffmpeg   # once
+python3 scripts/build-research-figures.py
 ```
 
-Only the stills load with the page; the animation is fetched on click. That is
-deliberate — four looping demos would break the site's rule of a single
-non-user-triggered animation, and would cost about 1.3 MB on load.
+Only the still loads with the page; the video is fetched on the first click,
+so the page costs one small image until a reader asks for more.
 
-**The three app captures are 400px wide and upscale 2.16x to fill the column.**
-Re-record them at native window resolution and rerun the script; the figure
-`width`/`height` in frontmatter are the only other things to update.
+**The crop in that script is load-bearing.** The master recording is a browser
+window, so everything above `CROP`'s top edge is tab bar, address bar, the
+"Not Secure" badge and extension buttons. None of that belongs on the page,
+and it is the kind of thing that ships unnoticed.
+
+SensDS carries one tour rather than a demo per tab: it moves through the
+interface a few seconds at a stage, which shows the range without turning the
+page into documentation, and it sidesteps the previous per-tab captures being
+400px wide and upscaled past legibility.
 
 ## Adding content
 

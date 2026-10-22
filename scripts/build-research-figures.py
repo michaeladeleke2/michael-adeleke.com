@@ -1,18 +1,19 @@
 """
-Builds the SensDS walkthrough figures for /research/sensdsv2 from the master
-recordings in media/.
+Builds the SensDS walkthrough for /research/sensdsv2 from the master recording
+in media/.
 
+    python3 -m pip install imageio imageio-ffmpeg   # once
     python3 scripts/build-research-figures.py
 
-For each figure it writes an animated WebP plus a still poster into
-public/research/sensds/. The page shows the still and only fetches the
-animation when the reader clicks, so four demos cost one image each on load.
+Outputs public/research/sensds/tour.mp4 and tour-still.webp.
 
-Each clip is trimmed to the liveliest window rather than the full recording:
-the raw captures run 48-74s of someone working through the interface, which
-nobody watches. The window is chosen by inter-frame change, and frames are
-screened for macOS UI intrusions (menus, the screen-recording toolbar) the
-same way the hero capture is.
+A single tour rather than one demo per tab: it moves through the interface a
+few seconds at a time, which is enough to show the range without turning the
+page into documentation. The earlier per-tab captures were 400px wide and
+upscaled past the point where any of their text was readable.
+
+H.264 rather than animated WebP for the same reason as the hero: a WebP is
+decoded frame by frame on the CPU and visibly stutters at this size.
 """
 
 import os
@@ -21,83 +22,61 @@ import sys
 import numpy as np
 from PIL import Image
 
+try:
+    import imageio.v2 as iio
+except ImportError:
+    sys.exit("Needs: python3 -m pip install imageio imageio-ffmpeg")
+
+SOURCE = "media/sensds-web-tour.gif"
 OUT = "public/research/sensds"
-
-# name -> (source, crop or None, target seconds, max width)
-FIGURES = {
-    "visualize": ("media/sensds-micro-doppler-capture.gif", None, 6.0, 1000),
-    "collect": ("media/sensds-collect.gif", None, 10.0, 800),
-    "train": ("media/sensds-train.gif", None, 10.0, 800),
-    "test": ("media/sensds-test.gif", None, 10.0, 800),
-}
-
-
-def ui_score(frame):
-    """Bright, desaturated pixels: macOS chrome, not app content."""
-    a = np.asarray(frame.convert("RGB").resize((320, 160)), dtype=np.int16)
-    mx, mn = a.max(axis=2), a.min(axis=2)
-    return int(((mx > 200) & ((mx - mn) < 25)).sum())
+# Everything above this is browser chrome: tab bar, address bar, the
+# "Not Secure" badge, the extension buttons. None of it belongs on the page.
+CROP = (0, 72, 1211, 760)
+WIDTH = 1208          # divisible by 8, close to native
+FPS = 14
+CRF = 27
+DEDUPE_FRAC = 0.05    # share of the MEAN change; see CLAUDE.md on why not median
 
 
-def build(name, src, crop, seconds, max_w):
-    if not os.path.exists(src):
-        print(f"  SKIP {name}: {src} not found")
-        return
-    im = Image.open(src)
+def main():
+    if not os.path.exists(SOURCE):
+        sys.exit(f"Source not found: {SOURCE}")
+    im = Image.open(SOURCE)
     n = im.n_frames
-    per = im.info.get("duration", 70) or 70
-    want = max(1, int(seconds * 1000 / per))
-
-    # Per-frame activity and UI score, on a cheap downsample.
-    small, ui = [], []
+    frames = []
     for i in range(n):
         im.seek(i)
-        f = im.convert("RGB")
-        if crop:
-            f = f.crop(crop)
-        small.append(np.asarray(f.resize((80, 40)), dtype=np.int16))
-        ui.append(ui_score(f))
-    ui = np.array(ui)
-    diff = np.array([0] + [int(np.abs(small[i] - small[i - 1]).sum()) for i in range(1, n)])
+        frames.append(np.asarray(im.convert("RGB").crop(CROP)))
 
-    clean_cap = np.percentile(ui, 25) + 40
-    best, best_score = 0, -1
-    for s in range(0, max(1, n - want)):
-        w = slice(s, s + want)
-        if ui[w].max() > clean_cap:
-            continue
-        score = diff[w].mean()
-        if score > best_score:
-            best, best_score = s, score
-    if best_score < 0:
-        best = 0
-        print(f"  {name}: no fully clean window, using the start")
+    keys = [f[::6, ::6].astype(np.int16) for f in frames]
+    deltas = [float(np.abs(keys[i] - keys[i - 1]).mean()) for i in range(1, len(keys))]
+    moving = [d for d in deltas if d > 0]
+    floor = (sum(moving) / len(moving)) * DEDUPE_FRAC if moving else 0.0
+    uniq, prev = [frames[0]], keys[0]
+    for f, k in zip(frames[1:], keys[1:]):
+        if float(np.abs(k - prev).mean()) > floor:
+            uniq.append(f)
+            prev = k
 
-    step = 1 if per >= 60 else 2
-    frames = []
-    for i in range(best, min(n, best + want), step):
-        im.seek(i)
-        f = im.convert("RGB")
-        if crop:
-            f = f.crop(crop)
-        if f.size[0] > max_w:
-            f = f.resize((max_w, round(max_w * f.size[1] / f.size[0])), Image.LANCZOS)
-        frames.append(f)
+    h = round(WIDTH * uniq[0].shape[0] / uniq[0].shape[1])
+    h -= h % 2
+    out = [np.asarray(Image.fromarray(f).resize((WIDTH, h), Image.LANCZOS)) for f in uniq]
 
     os.makedirs(OUT, exist_ok=True)
-    anim = f"{OUT}/{name}.webp"
-    still = f"{OUT}/{name}-still.webp"
-    frames[0].save(anim, save_all=True, append_images=frames[1:],
-                   duration=per * step, loop=0, quality=58, method=6)
-    frames[0].save(still, quality=82, method=6)
-    print(f"  {name:10s} {frames[0].size[0]}x{frames[0].size[1]}  "
-          f"{len(frames)}f  {len(frames)*per*step/1000:.1f}s  "
-          f"{os.path.getsize(anim)/1024:.0f} KB (still {os.path.getsize(still)/1024:.0f} KB)  "
-          f"from frame {best}")
+    iio.mimwrite(
+        f"{OUT}/tour.mp4", out, fps=FPS, codec="libx264", macro_block_size=2,
+        ffmpeg_params=["-crf", str(CRF), "-pix_fmt", "yuv420p",
+                       "-movflags", "+faststart", "-preset", "slow"],
+    )
+    Image.fromarray(out[0]).save(f"{OUT}/tour-still.webp", quality=82, method=6)
+
+    print(f"source: {SOURCE}  {n} frames")
+    print(f"  crop {CROP} -> {uniq[0].shape[1]}x{uniq[0].shape[0]}")
+    print(f"  unique frames: {len(uniq)}")
+    print(f"  {WIDTH}x{h} @ {FPS}fps = {len(out)/FPS:.1f}s")
+    for p in (f"{OUT}/tour.mp4", f"{OUT}/tour-still.webp"):
+        print(f"  wrote {p} ({os.path.getsize(p)/1024:.0f} KB)")
 
 
 if __name__ == "__main__":
-    only = sys.argv[1:] or list(FIGURES)
-    for name in only:
-        src, crop, secs, w = FIGURES[name]
-        build(name, src, crop, secs, w)
+    main()

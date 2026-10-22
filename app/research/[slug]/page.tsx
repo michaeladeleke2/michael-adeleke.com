@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Mdx } from '@/components/mdx'
 import { FigureCarousel } from '@/components/figure-carousel'
+import { ResearchFigure } from '@/components/research-figure'
 import { PageHeader, Shell } from '@/components/page-header'
 import { getProject, getProjects } from '@/lib/content'
 
@@ -94,10 +95,14 @@ export default async function ProjectPage({
             The system, end to end
           </h2>
           <p className="mx-auto mt-3 max-w-measure text-center text-sm text-ink-muted">
-            One class period runs the whole loop. Select a demo to play it, or step through them below.
+            One class period runs the whole loop. Select the tour to play it.
           </p>
           <div className="mt-8">
-            <FigureCarousel figures={fm.figures} />
+            {fm.figures.length === 1 ? (
+              <ResearchFigure figure={fm.figures[0]} />
+            ) : (
+              <FigureCarousel figures={fm.figures} />
+            )}
           </div>
         </section>
       )}
