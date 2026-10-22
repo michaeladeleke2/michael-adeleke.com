@@ -17,7 +17,7 @@ export default function ResearchPage() {
     <Shell>
       <PageHeader
         title="Research"
-        lede="What connects this work is a question rather than a method: how do you take something that is hard to see and make it legible enough to learn from? That has meant radar signals, virtual reality, and what a student believes about who belongs in computing. New projects are added here as they begin."
+        lede="What connects my work is a question rather than a method: how do you make something difficult to see legible enough to learn from? That question has led me to radar sensing, virtual reality, and the ways students understand who belongs in computing."
       />
 
       <div className="mt-8 grid gap-5 md:grid-cols-2">
