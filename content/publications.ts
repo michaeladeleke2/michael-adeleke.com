@@ -15,7 +15,7 @@ export type Publication = {
 
 export const AUTHOR_SELF = 'Michael B. Adeleke'
 
-export const publications: Publication[] = [
+const allPublications: Publication[] = [
   {
     id: 'sigcse-2024-breaking-stereotypes',
     type: 'conference',
@@ -77,6 +77,15 @@ export const publications: Publication[] = [
     doi: '10.1145/3706599.3719835',
   },
 ]
+
+/**
+ * Newest first, the way a CV reads. The sort is stable, so entries from the
+ * same year keep their authored order: SIGCSE (March) before BICE (February)
+ * in 2024, matching the CV.
+ */
+export const publications: Publication[] = [...allPublications].sort(
+  (a, b) => b.year - a.year,
+)
 
 export const publicationGroups: {
   type: Publication['type']
