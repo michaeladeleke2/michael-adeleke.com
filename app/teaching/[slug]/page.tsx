@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Mdx } from '@/components/mdx'
+import { VideoEmbed } from '@/components/video-embed'
 import { PageHeader, Shell } from '@/components/page-header'
 import { getTeachingEntry, getTeachingSlugs } from '@/lib/content'
 
@@ -91,6 +92,16 @@ export default async function TeachingEntryPage({
           </dl>
         }
       />
+
+      {fm.video && (
+        <div className="mx-auto mt-10 max-w-[54rem]">
+          <VideoEmbed
+            id={fm.video.id}
+            poster={fm.video.poster}
+            title={fm.video.title}
+          />
+        </div>
+      )}
 
       <article className="mt-8 text-base text-ink">
         <Mdx source={entry.body} />

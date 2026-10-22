@@ -65,6 +65,7 @@ export default function TeachingPage() {
                       title={e.frontmatter.title}
                       level={4}
                       meta={dateFormat.format(new Date(e.frontmatter.date))}
+                      draft={Boolean(e.frontmatter.draft)}
                     >
                       {e.frontmatter.competencies?.join(', ')}
                     </EntryCard>

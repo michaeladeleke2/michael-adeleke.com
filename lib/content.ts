@@ -4,6 +4,8 @@ import matter from 'gray-matter'
 
 const CONTENT_DIR = path.join(process.cwd(), 'content')
 
+export const SHOW_DRAFTS = process.env.NODE_ENV === 'development'
+
 export type ProjectFrontmatter = {
   title: string
   summary: string
@@ -32,6 +34,8 @@ export type TeachingFrontmatter = {
   date: string
   artifacts?: { label: string; file: string }[]
   competencies?: string[]
+  /** YouTube id, embedded behind a click-to-load poster. */
+  video?: { id: string; poster: string; title: string }
   draft?: boolean
   /** Marks a structural exemplar, rendered with a visible notice. */
   example?: boolean
@@ -58,7 +62,14 @@ function readCollection<T>(dir: string): Entry<T>[] {
         body: content,
       }
     })
-    .filter((e) => !(e.frontmatter as { draft?: boolean }).draft)
+    .filter(
+      (e) =>
+        // Drafts are visible on the dev server so work in progress can be
+        // seen in place, and filtered out of the production export so it can
+        // never ship. `next dev` sets development; `next build` sets
+        // production.
+        SHOW_DRAFTS || !(e.frontmatter as { draft?: boolean }).draft,
+    )
 }
 
 export function getProjects(): Entry<ProjectFrontmatter>[] {

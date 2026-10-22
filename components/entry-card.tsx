@@ -13,12 +13,14 @@ export function EntryCard({
   title,
   meta,
   level = 3,
+  draft = false,
   children,
 }: {
   href: string
   title: string
   meta?: string
   level?: 2 | 3 | 4
+  draft?: boolean
   children?: React.ReactNode
 }) {
   const Heading = `h${level}` as 'h2' | 'h3' | 'h4'
@@ -28,7 +30,16 @@ export function EntryCard({
       href={href}
       className="group block rounded-[4px] border border-hairline bg-bg p-6 transition-[transform,box-shadow,border-color] duration-120 hover:-translate-y-[2px] hover:border-accent-soft hover:shadow-lift-hover motion-reduce:hover:translate-y-0"
     >
-      {meta && <p className="text-xs text-ink-muted">{meta}</p>}
+      {meta && (
+        <p className="text-xs text-ink-muted">
+          {meta}
+          {draft && (
+            <span className="ml-2 font-display font-semibold text-accent">
+              Draft, not published
+            </span>
+          )}
+        </p>
+      )}
       <Heading className="mt-1 font-display text-lg leading-snug text-ink transition-colors duration-120 group-hover:text-accent">
         {title}
       </Heading>

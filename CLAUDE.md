@@ -201,6 +201,18 @@ built up across the content and read as a tell.
 
 Set `draft: true` on any entry or project to keep it out of the build.
 
+**Drafts render on the dev server and never in the export.** `SHOW_DRAFTS` in
+`lib/content.ts` is tied to `NODE_ENV`, so `npm run dev` shows work in
+progress in place, marked "Draft, not published", and `npm run build` strips
+it. That is how to preview an entry before its reflections are written.
+
+A teaching entry can carry a `video:` block (`id`, `poster`, `title`). It
+renders through `components/video-embed.tsx`, which shows a self-hosted poster
+and only mounts the YouTube iframe on click, via youtube-nocookie.com. Loading
+the iframe up front would pull about a megabyte of player code and set
+Google's cookies for every visitor, including everyone who never presses
+play.
+
 ## Deployment
 
 Vercel, static export. Domain stays registered at GoDaddy; only DNS points to
