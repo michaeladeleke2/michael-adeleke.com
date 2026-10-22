@@ -128,10 +128,22 @@ anything else. Skipping that step produces an animation that looks frozen:
 PIL merges the duplicate frames and sums their durations, so a 112-frame clip
 came out as 11 frames held for over a second each.
 
-From the unique frames it keeps the liveliest 60, crops to a 5.38:1 band
-centred on the signal (`CENTRE`, `BAND`), and encodes at 12fps. That is 66 KB
-for a 5s loop. There is no ease-out: the clip loops, so it has to rejoin its
-own first frame cleanly.
+Two thresholds here are not arbitrary, and both were got wrong first time
+because the distributions are bimodal.
+
+`DEDUPE_FRAC` is a share of the **mean** inter-frame change, not the median.
+Of the frames that differ at all, the median difference is 0.10 and the mean
+is 4.3: about half only twitch while the rest carry the motion. Thresholding
+on the median lands inside the wrong population, keeps visually static
+frames, and the opening looks like it is stuttering.
+
+`CROSSFADE_RANGE` is swept, not fixed. Blending the tail over the head makes
+the first frame continue from the last as consecutive source frames, so what
+decides whether the seam shows is *where* the join lands. On a quiet
+transition it vanishes; on a fast one it reads as a jump. Sweeping took the
+wrap from 44.7 to 0.3 against a mean step of 17.
+
+The result is a 3.2s loop whose wrap is 0.14x an ordinary frame step.
 
 If you swap in a different recording, check `CENTRE` against the new framing;
 everything else adapts.

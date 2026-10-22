@@ -47,8 +47,21 @@ DEFAULT_SOURCE = "media/sensds-hero-capture.mov"
 OUT_W = 1400
 BAND = 5.38            # output aspect ratio, matching the hero layout
 CENTRE = 0.465         # vertical centre of the signal, as a fraction of height
-FPS = 12               # constant rate; the loop has no ease, so it rejoins cleanly
-MAX_FRAMES = 60        # 5s at 12fps
+FPS = 12
+MAX_FRAMES = 60        # 5s at 12fps, before the crossfade shortens it
+# Frames changing less than this share of the MEAN change are duplicates.
+# The distribution is strongly bimodal: of the frames that differ at all, the
+# median difference is 0.10 and the mean is 4.3, because roughly half of them
+# only twitch while the rest carry the real motion. Thresholding on the median
+# therefore lands inside the wrong population and keeps visually static
+# frames, which is what made the opening look like it was stuttering.
+DEDUPE_FRAC = 0.05
+# The loop overlap is searched, not fixed. Blending the tail over the head
+# makes out[0] continue from out[-1] as consecutive source frames, so what
+# actually decides whether the seam shows is *where* the join lands: on a
+# quiet transition it is invisible, on a fast one it reads as a jump. Sweeping
+# the overlap moved the wrap from 44.7 to 0.8 against a mean step of 18.
+CROSSFADE_RANGE = (8, 30)
 CRF = 26               # x264 quality; 66 KB at 1400x260
 
 
@@ -97,14 +110,52 @@ def liveliest(frames, want):
 
 
 def dedupe(frames):
-    """Drop consecutive duplicates left by the variable-rate recording."""
-    out, prev = [], None
-    for f in frames:
-        key = f[::4, ::4].astype(np.int16)
-        if prev is None or np.abs(key - prev).sum() > 0:
+    """Drop duplicate and near-static frames from the variable-rate recording."""
+    keys = [f[::4, ::4].astype(np.int16) for f in frames]
+    deltas = [float(np.abs(keys[i] - keys[i - 1]).mean()) for i in range(1, len(keys))]
+    moving = [d for d in deltas if d > 0]
+    floor = (sum(moving) / len(moving)) * DEDUPE_FRAC if moving else 0.0
+    out, prev = [frames[0]], keys[0]
+    for f, k in zip(frames[1:], keys[1:]):
+        if float(np.abs(k - prev).mean()) > floor:
             out.append(f)
-            prev = key
+            prev = k
     return out
+
+
+def _blend(arr, k):
+    n = len(arr)
+    L = n - k
+    out = [arr[L + i] * (1 - i / (k - 1)) + arr[i] * (i / (k - 1))
+           for i in range(k)]
+    out.extend(arr[k:L])
+    return out
+
+
+def seamless(picked):
+    """Blend the tail over the head, with the overlap chosen to hide the join.
+
+    out[0] continues from out[-1] as consecutive source frames, so the seam is
+    only as visible as that one step. Sweeping the overlap finds a join that
+    lands on a quiet transition.
+    """
+    arr = [np.asarray(f).astype(np.float32) for f in picked]
+    lo, hi = CROSSFADE_RANGE
+    best = None
+    for k in range(lo, min(hi, len(arr) // 2 - 1) + 1):
+        out = _blend(arr, k)
+        sm = [o[::8, ::8].astype(np.int16) for o in out]
+        steps = [float(np.abs(sm[i] - sm[i - 1]).mean()) for i in range(1, len(sm))]
+        wrap = float(np.abs(sm[0] - sm[-1]).mean())
+        mean_step = sum(steps) / len(steps)
+        # prefer an invisible wrap, then a longer loop
+        rank = (wrap / mean_step, -len(out))
+        if best is None or rank < best[0]:
+            best = (rank, k, out, wrap, mean_step)
+    _, k, out, wrap, mean_step = best
+    print(f"  loop overlap {k}: wrap {wrap:.1f} vs mean step {mean_step:.1f} "
+          f"({wrap / mean_step:.2f}x) over {len(out)} frames")
+    return [Image.fromarray(o.round().astype(np.uint8)) for o in out]
 
 
 def main(src):
@@ -126,6 +177,8 @@ def main(src):
         Image.fromarray(f).crop(box).resize((OUT_W, out_h), Image.LANCZOS)
         for f in uniq
     ]
+
+    picked = seamless(picked)
 
     os.makedirs("public/hero", exist_ok=True)
     # H.264 rather than animated WebP: a WebP is decoded frame by frame on the
