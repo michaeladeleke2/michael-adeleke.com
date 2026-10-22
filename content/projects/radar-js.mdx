@@ -1,0 +1,32 @@
+---
+title: "radar-js"
+summary: "A JavaScript library that brings radar sensing into the browser, so working with a 60 GHz sensor does not start with installing drivers and a local toolchain."
+period: "2026 – present"
+area: "Radar sensing in the browser"
+role: "Developer"
+order: 2
+stack:
+  - "JavaScript"
+  - "Web Serial API"
+---
+
+Working with a radar sensor usually begins with an obstacle that has nothing
+to do with radar: installing something. Drivers, a Python environment, a
+platform-specific build. In a classroom or a workshop, that barrier often
+decides whether the sensing happens at all, before anyone has seen a signal.
+
+radar-js moves that work into the browser. It connects to a 60 GHz radar
+sensor over the Web Serial API and streams data in real time, with no drivers
+and no local installation, on macOS, Windows, and anywhere else a supported
+browser runs. The model is bci.js, which did the same thing for EEG: put the
+signal somewhere people already are, and starting no longer requires a lab
+setup.
+
+That matters most for the teaching work. The version of SensDS that runs on a
+desktop ships as a signed executable precisely because a tool needing a Python
+environment is a tool that does not get used in a classroom. A browser removes
+even that step.
+
+## Status
+
+In development, and not yet published.
