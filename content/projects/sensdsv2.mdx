@@ -46,11 +46,11 @@ pre-labeled. The interesting decisions, what to measure, how to represent it,
 and what to do when the signal is ambiguous, have already been made by someone
 else. SensDS exists to hand those decisions back to the student.
 
-The application drives an Infineon BGT60TR13C 60 GHz radar sensor and takes a
-class through the whole loop: watch the micro-Doppler spectrogram move as you
-move, record labeled gesture captures, train a model on what the class just
-collected, and test it live. Six tabs, one for each stage, make the pipeline
-visible rather than hiding it behind a script.
+SensDS, for Sensing for Data Science, drives an Infineon BGT60TR13C 60 GHz
+radar sensor and takes a class through the whole loop: watch the micro-Doppler
+spectrogram move as you move, record labeled gesture captures, train a model
+on what the class just collected, and test it live. Each stage gets its own
+tab, so the pipeline stays visible rather than hidden behind a script.
 
 ## The signal pipeline
 
@@ -79,5 +79,23 @@ workstation. Getting inference to keep up meant reworking model selection and
 inference scheduling rather than assuming access to a dedicated GPU. It ships
 as signed macOS and Windows executables with a user guide because a tool that
 requires a Python environment to be configured is a tool that does not get used
-in a classroom. A browser-based version, running over the Web Serial API with
-no drivers or local installs at all, is now functional.
+in a classroom.
+
+## In the browser
+
+SensDS Web removes the install entirely. It connects to the radar over the Web
+Serial API from a browser tab, streams frames live, and reports what it is
+doing while it does it, down to the frame count and how many frames were
+dropped. The stages are the same ones the desktop build walks through, with
+room for more: visualize, collect, analysis, curve fit, train, test, results,
+and control of a VEX AIM robot.
+
+The visualize tab is where the sensor stops being abstract. A live Doppler
+spectrogram scrolls as you move, with the time window, plot size, noise floor
+and spectrogram method all exposed as controls rather than buried in
+configuration. A student can change how the signal is computed and watch the
+picture change.
+
+It also keeps score. Progress is tracked as levels and experience points,
+which is a small thing that does real work in a classroom: it gives a student
+who is not yet sure they belong in the room a reason to take the next step.
