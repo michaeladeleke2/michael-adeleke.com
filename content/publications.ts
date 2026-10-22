@@ -28,7 +28,7 @@ export const publications: Publication[] = [
       'Katlyn Cox',
     ],
     year: 2024,
-    title: 'Breaking stereotypes and feeding the STEM pipeline',
+    title: 'Breaking Stereotypes and Feeding the STEM Pipeline',
     venue:
       'Proceedings of the 55th ACM Technical Symposium on Computer Science Education V. 1',
     venueShort: 'SIGCSE 2024',
@@ -49,7 +49,7 @@ export const publications: Publication[] = [
     ],
     year: 2024,
     title:
-      'CodeBears: Key insights gained from a summer coding camp empowering underrepresented youth',
+      'CodeBears: Key Insights Gained from a Summer Coding Camp Empowering Underrepresented Youth',
     venue: '2024 Black Issues in Computing Education',
     venueShort: 'BICE 2024',
     pages: '80–86',
@@ -68,7 +68,7 @@ export const publications: Publication[] = [
     ],
     year: 2025,
     title:
-      'Revolutionizing culturally relevant math education through AI and co-designing strategies',
+      'Revolutionizing Culturally Relevant Math Education Through AI and Co-Designing Strategies',
     venue:
       'Extended Abstracts of the CHI Conference on Human Factors in Computing Systems',
     venueShort: 'CHI EA ’25',

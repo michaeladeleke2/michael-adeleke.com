@@ -22,7 +22,7 @@ export const education: Education[] = [
     degree: 'BS in Computer Science',
     period: 'December 2024',
     advisor: 'Dr. Naja Mack, Human-AI eXperience Lab',
-    notes: ['Summa cum laude', 'GPA 3.87'],
+    notes: ['Summa Cum Laude', 'GPA 3.87'],
   },
 ]
 

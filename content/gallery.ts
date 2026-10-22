@@ -157,7 +157,7 @@ export const photos: Photo[] = [
     width: 800,
     height: 600,
     alt:
-      'Holding an oversized second-place cheque for five hundred dollars alongside a certificate, from the Morgan TechFest poster competition.',
+      'Holding an oversized second-place cheque for five hundred dollars alongside a certificate, from the Morgan TechFest Poster Competition.',
     where: 'Morgan TechFest',
     when: '2023',
   },
