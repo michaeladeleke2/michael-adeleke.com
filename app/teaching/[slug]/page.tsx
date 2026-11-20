@@ -4,7 +4,12 @@ import { notFound } from 'next/navigation'
 import { Mdx } from '@/components/mdx'
 import { VideoEmbed } from '@/components/video-embed'
 import { PageHeader, Shell } from '@/components/page-header'
-import { getTeachingEntry, getTeachingSlugs } from '@/lib/content'
+import { TeachingFigure } from '@/components/teaching-figure'
+import {
+  getTeachingEntry,
+  getTeachingSlugs,
+  splitAfterSection,
+} from '@/lib/content'
 
 // With output: 'export', a dynamic route whose generateStaticParams returns an
 // empty array is rejected unless this is set. It legitimately returns empty
@@ -46,6 +51,9 @@ export default async function TeachingEntryPage({
   const entry = getTeachingEntry(slug)
   if (!entry) notFound()
   const fm = entry.frontmatter
+  const [beforeFigure, afterFigure] = fm.figure
+    ? splitAfterSection(entry.body, fm.figure.after ?? 'What I made')
+    : [entry.body, '']
 
   return (
     <Shell>
@@ -104,7 +112,16 @@ export default async function TeachingEntryPage({
       )}
 
       <article className="mt-8 text-base text-ink">
-        <Mdx source={entry.body} />
+        <Mdx source={beforeFigure} />
+        {fm.figure && <TeachingFigure figure={fm.figure} />}
+        {/* The figure's own margin replaces the heading margin that
+            prose-body zeroes on a first child, so the section after it sits
+            at the same rhythm as every other section. */}
+        {afterFigure && (
+          <div className="mt-9">
+            <Mdx source={afterFigure} />
+          </div>
+        )}
       </article>
 
       {fm.artifacts && fm.artifacts.length > 0 && (

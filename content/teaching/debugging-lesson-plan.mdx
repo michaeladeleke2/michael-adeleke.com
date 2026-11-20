@@ -6,6 +6,27 @@ draft: false
 artifacts:
   - { label: "Lesson plan", file: "/teaching/files/debugging-lesson-plan.pdf" }
 competencies: ["Lesson design", "Active learning", "Misconceptions"]
+figure:
+  kind: timeline
+  minutes: 50
+  caption: "Six assessment checkpoints across the session. Five read the room; the one that reads a single student arrives with four minutes left."
+  blocks:
+    - { start: 0, end: 5 }
+    - { start: 5, end: 10 }
+    - { start: 10, end: 18 }
+    - { start: 18, end: 23 }
+    - { start: 23, end: 35 }
+    - { start: 35, end: 41 }
+    - { start: 41, end: 46 }
+    - { start: 46, end: 49 }
+    - { start: 49, end: 50 }
+  checkpoints:
+    - { at: 2.5, kind: class, label: "Retrieval warm up" }
+    - { at: 7.5, kind: class, label: "Kahoot on prior lessons" }
+    - { at: 20.5, kind: class, label: "Knowledge check on three snippets" }
+    - { at: 38, kind: class, label: "Class debrief" }
+    - { at: 43.5, kind: class, label: "Kahoot on scenarios" }
+    - { at: 47.5, kind: individual, label: "Exit question" }
 ---
 
 ## What the activity asked
@@ -14,11 +35,11 @@ Produce a 50 minute class session plan for CS 101 on debugging Python programs, 
 
 ## What I made
 
-A nine block sequence: a written retrieval warm up on what debugging means, a Kahoot check on variables, conditionals and loops from prior lessons, a mini lecture introducing syntax, runtime and logic errors alongside a read, hypothesize, change one thing, retest process, a second knowledge check on three code snippets done individually then compared with a partner, twelve minutes of collaborative debugging in pairs, a class debrief, a scenario based Kahoot, an individual exit question, and a closing preview. The assessment table maps six checkpoints: one diagnostic, four formative, and one individual. Four outcomes anchor the plan, the fourth being that students explain why a proposed correction fixes a problem.
+Nine blocks across the fifty minutes, moving from a written retrieval warm up, through a mini lecture on syntax, runtime and logic errors, into twelve minutes of collaborative debugging in pairs, and out through a debrief and an individual exit question. Four outcomes anchor the plan, the fourth being that students explain why a proposed correction fixes a problem.
 
 ## What I learned
 
-Counting the assessment table against the clock showed me something I missed while writing it. Of six checkpoints, only one is individual, and it lands at minute 46, so I have no evidence about any particular student until four minutes remain and nothing I can do with it. My own instructor note says that if many students miss a Kahoot question I should pause and address the misconception, but every one of the fifty minutes is already committed, so the plan instructs me to do something it leaves no room for. The twelve minute collaborative block is the one that will overrun: two to three programs in twelve minutes is four to six minutes each including explanation, correction and testing, which is optimistic for novices. The strongest item in the plan is a Kahoot question I wrote almost offhand, asking what the concern is when you change three lines of code and the program starts working, because it targets the behaviour novices actually have rather than the definitions they can memorize.
+Drawing the checkpoints against the clock showed me something I missed while writing the plan. I have no evidence about any particular student until four minutes remain, and nothing I can do with it when it arrives. My own instructor note says that if many students miss a Kahoot question I should pause and address the misconception, but every one of the fifty minutes is already committed, so the plan instructs me to do something it leaves no room for. The twelve minute collaborative block is the one that will overrun: two to three programs in twelve minutes is four to six minutes each including explanation, correction and testing, which is optimistic for novices. The strongest item in the plan is a Kahoot question I wrote almost offhand, asking what the concern is when you change three lines of code and the program starts working, because it targets the behaviour novices actually have rather than the definitions they can memorize.
 
 ## How this shapes my teaching
 

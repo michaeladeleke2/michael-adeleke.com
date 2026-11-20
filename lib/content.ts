@@ -28,6 +28,27 @@ export type ProjectFrontmatter = {
   }[]
 }
 
+/**
+ * A figure rendered from frontmatter, placed after the section named by
+ * `after`. Entries carry data, not markup: see components/teaching-figure.tsx
+ * for why this does not live as JSX in the body.
+ */
+export type TeachingFigure = { caption: string; after?: string } & (
+  | {
+      kind: 'scores'
+      /** Points available, not the largest value scored. */
+      max: number
+      unit?: string
+      rows: { label: string; value: number }[]
+    }
+  | {
+      kind: 'timeline'
+      minutes: number
+      blocks: { start: number; end: number }[]
+      checkpoints: { at: number; kind: 'class' | 'individual'; label: string }[]
+    }
+)
+
 export type TeachingFrontmatter = {
   title: string
   theme: string
@@ -39,6 +60,8 @@ export type TeachingFrontmatter = {
   draft?: boolean
   /** Marks a structural exemplar, rendered with a visible notice. */
   example?: boolean
+  /** A chart or timeline rendered inside the write-up. */
+  figure?: TeachingFigure
 }
 
 export type Entry<T> = {
@@ -165,4 +188,23 @@ export function getTeachingPhilosophy(): string {
   const file = path.join(CONTENT_DIR, 'teaching-philosophy.mdx')
   if (!fs.existsSync(file)) return ''
   return matter(fs.readFileSync(file, 'utf8')).content
+}
+
+/**
+ * Splits a body just before the heading that follows `after`, so a figure can
+ * be placed inside the write-up rather than above or below all of it. An
+ * unmatched section name leaves the body whole and the figure renders at the
+ * end, which is visible in review rather than silent.
+ */
+export function splitAfterSection(
+  body: string,
+  after: string,
+): [string, string] {
+  const headings = [...body.matchAll(/^##\s+(.+)$/gm)]
+  const index = headings.findIndex(
+    (h) => h[1].trim().toLowerCase() === after.trim().toLowerCase(),
+  )
+  if (index === -1 || index === headings.length - 1) return [body, '']
+  const next = headings[index + 1].index ?? body.length
+  return [body.slice(0, next).trimEnd(), body.slice(next)]
 }

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/teaching/self-assessment-inventories",
+      "destination": "/teaching/",
+      "permanent": true
+    },
+    {
+      "source": "/teaching/self-assessment-inventories/",
+      "destination": "/teaching/",
+      "permanent": true
+    }
+  ]
+}
