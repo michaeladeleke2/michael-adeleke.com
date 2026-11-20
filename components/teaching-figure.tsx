@@ -12,6 +12,35 @@ import type { TeachingFigure } from '@/lib/content'
  * data comes in through frontmatter and the body stays prose.
  */
 export function TeachingFigure({ figure }: { figure: TeachingFigure }) {
+  if (figure.kind === 'image') {
+    return (
+      <figure className="mx-auto my-9 max-w-[62rem]">
+        {/* A plan diagram is wider than a line of prose and does not get
+            narrower on request. Below its natural width it scrolls rather
+            than shrinking into illegibility, and the scroller takes focus so
+            that is reachable from the keyboard. */}
+        <div
+          tabIndex={0}
+          role="group"
+          aria-label={figure.alt}
+          className="overflow-x-auto rounded-[4px] border border-hairline bg-white"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element -- static export, and next/image does not optimise SVG */}
+          <img
+            src={figure.src}
+            width={figure.width}
+            height={figure.height}
+            alt={figure.alt}
+            className="block h-auto w-full"
+            style={{ minWidth: figure.minWidth ?? '46rem' }}
+          />
+        </div>
+        <figcaption className="mx-auto mt-3 max-w-measure text-xs text-ink-muted">
+          {figure.caption}
+        </figcaption>
+      </figure>
+    )
+  }
   if (figure.kind === 'timeline') {
     return (
       <div className="mx-auto max-w-measure">

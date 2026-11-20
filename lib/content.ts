@@ -42,6 +42,15 @@ export type TeachingFigure = { caption: string; after?: string } & (
       rows: { label: string; value: number }[]
     }
   | {
+      kind: 'image'
+      src: string
+      width: number
+      height: number
+      alt: string
+      /** Natural width below which the figure scrolls rather than shrinks. */
+      minWidth?: string
+    }
+  | {
       kind: 'timeline'
       minutes: number
       blocks: { start: number; end: number }[]
